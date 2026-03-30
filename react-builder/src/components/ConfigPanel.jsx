@@ -10,7 +10,7 @@ export default function ConfigPanel({ config, onChange, tabs, onAddTab, onRename
                 slotId,
                 block: BLOCKS.find(b => b.id === blockId)
             }))
-            .filter(item => item.block && (item.block.contractKey || item.block.multiToken))
+            .filter(item => item.block && (item.block.contractKey || item.block.multiToken || item.block.config))
         : [];
 
     // === Handlers cho Multi-Token ===
@@ -66,6 +66,101 @@ export default function ConfigPanel({ config, onChange, tabs, onAddTab, onRename
                         {placedInstances.map(({ slotId, block }) => {
                             const slotKey = `${activeTab.id}-${slotId}`;
                             const isSelected = selectedSlotId === slotId;
+
+                            // ===== DYNAMIC CONFIG (Marketplace blocks) =====
+                            if (block.config) {
+                                const configVals = contracts[slotKey] || {};
+                                const allValid = Object.keys(configVals).length > 0;
+                                return (
+                                    <div
+                                        key={slotKey}
+                                        onClick={() => onSelectSlot(slotId)}
+                                        style={{
+                                            background: isSelected ? '#f0fdf4' : '#f8fafc',
+                                            border: `2px solid ${isSelected ? '#10b981' : '#e2e8f0'}`,
+                                            borderRadius: '10px',
+                                            padding: '10px',
+                                            cursor: 'pointer',
+                                            transition: '0.15s'
+                                        }}
+                                    >
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                            <div>
+                                                <span style={{ fontSize: '11px', fontWeight: 700, color: block.color }}>{block.name}</span>
+                                                <span style={{ fontSize: '9px', color: '#94a3b8', marginLeft: '6px' }}>Vị trí: {slotId}</span>
+                                            </div>
+                                            <span style={{ fontSize: '11px' }}>{allValid ? '✅' : '⚠️'}</span>
+                                        </div>
+
+                                        {block.config.map(cfg => {
+                                            const val = configVals[cfg.key] || '';
+                                            const isAddress = cfg.isAddress !== false && cfg.key !== 'network';
+                                            const hasValue = isAddress ? (val && val.length === 42) : (val && val.length > 0);
+                                            return (
+                                                <div key={cfg.key} style={{marginBottom: '6px'}}>
+                                                    <label style={{ fontSize: '9px', color: '#64748b', fontWeight: 'bold' }}>{cfg.label}</label>
+                                                    {cfg.type === 'textarea' ? (
+                                                        <textarea
+                                                            value={val}
+                                                            onChange={e => {
+                                                                e.stopPropagation();
+                                                                onContractChange(slotKey, { ...configVals, [cfg.key]: e.target.value });
+                                                            }}
+                                                            onClick={e => e.stopPropagation()}
+                                                            placeholder="Mỗi dòng 1 giá trị..."
+                                                            rows={4}
+                                                            style={{
+                                                                width: '100%', padding: '6px',
+                                                                border: `1px solid ${val ? '#10b981' : '#fbbf24'}`,
+                                                                borderRadius: '5px', fontSize: '9px', fontFamily: 'monospace',
+                                                                background: val ? '#f0fdf4' : '#fffbeb',
+                                                                resize: 'vertical'
+                                                            }}
+                                                        />
+                                                    ) : cfg.type === 'select' ? (
+                                                        <select
+                                                            value={val}
+                                                            onChange={e => {
+                                                                e.stopPropagation();
+                                                                onContractChange(slotKey, { ...configVals, [cfg.key]: e.target.value });
+                                                            }}
+                                                            onClick={e => e.stopPropagation()}
+                                                            style={{
+                                                                width: '100%', padding: '6px',
+                                                                border: `1px solid ${hasValue ? '#10b981' : '#fbbf24'}`,
+                                                                borderRadius: '5px', fontSize: '10px', fontFamily: 'monospace',
+                                                                background: hasValue ? '#f0fdf4' : '#fffbeb'
+                                                            }}
+                                                        >
+                                                            <option value="" disabled>-- Chọn mạng lưới --</option>
+                                                            {cfg.options && cfg.options.map(opt => (
+                                                                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                                            ))}
+                                                        </select>
+                                                    ) : (
+                                                        <input
+                                                            type={cfg.type || 'text'}
+                                                            value={val}
+                                                            onChange={e => {
+                                                                e.stopPropagation();
+                                                                onContractChange(slotKey, { ...configVals, [cfg.key]: e.target.value });
+                                                            }}
+                                                            onClick={e => e.stopPropagation()}
+                                                            placeholder={cfg.placeholder || (isAddress ? "0x..." : "Nhập giá trị...")}
+                                                            style={{
+                                                                width: '100%', padding: '6px',
+                                                                border: `1px solid ${hasValue ? '#10b981' : '#fbbf24'}`,
+                                                                borderRadius: '5px', fontSize: '10px', fontFamily: 'monospace',
+                                                                background: hasValue ? '#f0fdf4' : '#fffbeb'
+                                                            }}
+                                                        />
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                );
+                            }
 
                             // ===== MULTI-TOKEN (Balance block) =====
                             if (block.multiToken) {

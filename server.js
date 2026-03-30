@@ -20,6 +20,13 @@ const MIME = {
 
 http.createServer((req, res) => {
 
+    // === Bỏ qua lỗi lặt vặt Favicon ===
+    if (req.url === '/favicon.ico') {
+        res.writeHead(204);
+        res.end();
+        return;
+    }
+
     // === POST: Nhận code từ Builder và lưu thành file ===
     if (req.method === 'POST' && req.url === '/save-app') {
         let body = '';

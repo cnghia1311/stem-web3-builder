@@ -10,15 +10,15 @@ export function generateWeb3Code(tabs, config, contracts) {
     const layout = config.layout || 'desktop';
 
     let bg, cardBg, textColor;
-    if (theme === 'dark')  { bg = '#0f172a'; cardBg = '#1e293b'; textColor = '#e2e8f0'; }
+    if (theme === 'dark') { bg = '#0f172a'; cardBg = '#1e293b'; textColor = '#e2e8f0'; }
     if (theme === 'light') { bg = '#f8fafc'; cardBg = '#ffffff'; textColor = '#1e293b'; }
-    if (theme === 'neon')  { bg = '#0a0015'; cardBg = '#1a0030'; textColor = '#e0d0ff'; }
+    if (theme === 'neon') { bg = '#0a0015'; cardBg = '#1a0030'; textColor = '#e0d0ff'; }
 
     let tabNavHtml = '';
     if (tabs.length > 1) {
         tabNavHtml = `
     <div class="tabs-nav">
-${tabs.map((t, i) => `        <button class="tab-btn ${i===0?'active':''}" onclick="window.switchTab('${t.id}')" id="btn-${t.id}">${t.name}</button>`).join('\n')}
+${tabs.map((t, i) => `        <button class="tab-btn ${i === 0 ? 'active' : ''}" onclick="window.switchTab('${t.id}')" id="btn-${t.id}">${t.name}</button>`).join('\n')}
     </div>`;
     }
 
@@ -26,10 +26,11 @@ ${tabs.map((t, i) => `        <button class="tab-btn ${i===0?'active':''}" oncli
     let allEngineCode = [];
     let allBindCode = [];
     let refreshBalanceFns = [];
+    let globalCodeMap = {};
 
     tabs.forEach((tab, tabIdx) => {
         const tpl = TEMPLATES.find(t => t.id === tab.templateId) || TEMPLATES[0];
-        
+
         // Sinh grid items cho từng slot
         let slotsHtml = '';
 
@@ -44,9 +45,7 @@ ${tabs.map((t, i) => `        <button class="tab-btn ${i===0?'active':''}" oncli
                 const contractData = contracts[slotKey] || '';
 
                 // 1. Prefix HTML IDs
-                let html = block.multiToken
-                    ? block.exportHtml(tk, contractData)
-                    : block.exportHtml(tk, contractData);
+                let html = block.exportHtml(tk, contractData);
                 html = html.replace(/id="([^"]+)"/g, `id="${pfx}-$1"`);
 
                 slotsHtml += `
@@ -55,10 +54,14 @@ ${html}
             </div>`;
 
                 // 2. Wrap Engine Code in IIFE
-                let code = block.engineCode();
+                let code = block.engineCode ? block.engineCode(pfx, tk, contractData) : '';
+
+                if (block.globalCode) {
+                    globalCodeMap[block.id] = block.globalCode();
+                }
                 // Prefix getElementById
                 code = code.replace(/getElementById\('([^']+)'\)/g, `getElementById('${pfx}-$1')`);
-                
+
                 let localFuncs = [];
                 const funcMatches = code.match(/^\s+(?:async\s+)?function\s+(\w+)/gm);
                 if (funcMatches) {
@@ -77,7 +80,7 @@ ${code}
                 }
 
                 // 3. Bindings
-                block.bindings.forEach(b => {
+                (block.bindings || []).forEach(b => {
                     const ev = b.event || 'click';
                     allBindCode.push(`b('${pfx}-${b.btn}', ${pfx}_funcs.${b.fn}, '${ev}');`);
                 });
@@ -104,7 +107,7 @@ ${slotsHtml}
 
     // Cập nhật connectWallet để gọi masterRefresh
     let engineCodeStr = allEngineCode.join('\n');
-    engineCodeStr = engineCodeStr.replace(/if\(typeof\s+refreshBalance\s*===\s*'function'\)\s*refreshBalance\(\);?/g, 
+    engineCodeStr = engineCodeStr.replace(/if\(typeof\s+refreshBalance\s*===\s*'function'\)\s*refreshBalance\(\);?/g,
         `if(typeof window.refreshAllBalances==='function') window.refreshAllBalances();`);
 
     return `<!DOCTYPE html>
@@ -117,7 +120,7 @@ ${slotsHtml}
     <style>
         *{box-sizing:border-box;margin:0;padding:0;}
         body{font-family:'Segoe UI',sans-serif;background:${bg};color:${textColor};display:flex;justify-content:center;padding:40px 20px;min-height:100vh;}
-        .app{background:${cardBg};padding:${layout==='desktop'?'40px':'30px'};border-radius:${layout==='desktop'?'12px':'20px'};width:100%;max-width:${layout==='desktop'?'900px':'420px'};box-shadow:0 20px 50px rgba(0,0,0,0.3);}
+        .app{background:${cardBg};padding:${layout === 'desktop' ? '40px' : '30px'};border-radius:${layout === 'desktop' ? '12px' : '20px'};width:100%;max-width:${layout === 'desktop' ? '900px' : '420px'};box-shadow:0 20px 50px rgba(0,0,0,0.3);}
         h1{text-align:center;font-size:24px;margin-bottom:5px;}
         .subtitle{text-align:center;color:#64748b;font-size:14px;margin-bottom:25px;}
 
@@ -160,9 +163,14 @@ ${allTabsHtml}
     };
 
     let provider,signer,userAddr;
+    window.stemEvents = new EventTarget();
+    window.stemEvents.addEventListener('GIAO_DICH_THANH_CONG', () => {
+        if(typeof window.refreshAllBalances === 'function') window.refreshAllBalances();
+    });
+    
     function toast(t,m){let c='#3b82f6';if(t==='success')c='#10b981';if(t==='error')c='#ef4444';const d=document.createElement('div');d.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:'+c+';color:white;padding:12px 24px;border-radius:10px;font-size:14px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);max-width:90%;text-align:center;';d.innerText=(t==='success'?'✅ ':t==='error'?'❌ ':'ℹ️ ')+m;document.body.appendChild(d);setTimeout(()=>d.remove(),4000);}
 
-${allGlobalCode.join('\n\n')}
+${Object.values(globalCodeMap).join('\n\n')}
 
 ${engineCodeStr}
 ${masterRefresh}

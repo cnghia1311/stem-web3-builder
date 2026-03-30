@@ -51,32 +51,12 @@
         <button id="t0ss1-web3-connect" style="background:#f59e0b;">🦊 Kết Nối MetaMask</button>
     </div>
             </div>
-            <div class="grid-cell" style="grid-column:span 1">
-
-    <div class="khoi" style="border-left-color:#10b981;">
-        <div class="khoi-title">Số dư tài khoản <span style="color:#10b981;font-size:9px;">● LIVE</span></div>
-        <select id="t0ss2-bal-select" style="width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:rgba(0,0,0,0.3);color:inherit;font-size:13px;margin-bottom:10px;cursor:pointer;">
-            <option value="0x53dC30A71d2311B2AF72cD59bC1559A99fed5170" data-name="0x53dC...">0x53dC...</option><option value="0x779877A7B0D9E8603169DdbD7836e478b4624789" data-name="0x7798...">0x7798...</option>
-        </select>
-        <p style="font-size:32px;font-weight:800;margin:5px 0;"><span id="t0ss2-bal-value">0</span> <span id="t0ss2-bal-token-name" style="font-size:16px;color:#64748b;">DOG</span></p>
-        <p id="t0ss2-bal-status" style="font-size:11px;color:#64748b;margin-bottom:8px;">⏳ Chưa kết nối</p>
-        <button id="t0ss2-bal-check" style="background:#10b981;">🔄 Làm Mới</button>
-    </div>
-            </div>
-            <div class="grid-cell" style="grid-column:span 1">
-
-    <div class="khoi" style="border-left-color:#8b5cf6;">
-        <div class="khoi-title">Chuyển tiền cho bạn</div>
-        <select id="t0ss3-tf-select" style="width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:rgba(0,0,0,0.3);color:inherit;font-size:13px;margin-bottom:10px;cursor:pointer;">
-            <option value="0x53dC30A71d2311B2AF72cD59bC1559A99fed5170" data-name="0x53dC...">0x53dC...</option><option value="0x779877A7B0D9E8603169DdbD7836e478b4624789" data-name="0x7798...">0x7798...</option>
-        </select>
-        <input id="t0ss3-tf-address" type="text" placeholder="Địa chỉ ví bạn nhận (0x...)">
-        <input id="t0ss3-tf-amount" type="number" placeholder="Số lượng Token...">
-        <button id="t0ss3-tf-btn" style="background:#8b5cf6;">🚀 Chuyển Ngay</button>
-    </div>
-            </div>
             <div class="grid-cell empty" style="grid-column:span 1"></div>
-            <div class="grid-cell empty" style="grid-column:span 2"></div>
+            <div class="grid-cell empty" style="grid-column:span 1"></div>
+            <div class="grid-cell empty" style="grid-column:span 1"></div>
+            <div class="grid-cell" style="grid-column:span 2">
+<div class="khoi">🖼️ Túi đựng Bằng Khen Cứng...</div>
+            </div>
             <div class="grid-cell empty" style="grid-column:span 1"></div>
             <div class="grid-cell empty" style="grid-column:span 1"></div>
         </div>
@@ -92,7 +72,14 @@
     };
 
     let provider,signer,userAddr;
+    window.stemEvents = new EventTarget();
+    window.stemEvents.addEventListener('GIAO_DICH_THANH_CONG', () => {
+        if(typeof window.refreshAllBalances === 'function') window.refreshAllBalances();
+    });
+    
     function toast(t,m){let c='#3b82f6';if(t==='success')c='#10b981';if(t==='error')c='#ef4444';const d=document.createElement('div');d.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:'+c+';color:white;padding:12px 24px;border-radius:10px;font-size:14px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);max-width:90%;text-align:center;';d.innerText=(t==='success'?'✅ ':t==='error'?'❌ ':'ℹ️ ')+m;document.body.appendChild(d);setTimeout(()=>d.remove(),4000);}
+
+
 
 
 const t0ss1_funcs = (function() {
@@ -112,101 +99,13 @@ const t0ss1_funcs = (function() {
     return { connectWallet };
 })();
 
-const t0ss2_funcs = (function() {
+const t0ss5_funcs = (function() {
 
-    let _balInterval=null, _balContract=null;
-    async function refreshBalance(){
-        if(!signer){return;}
-        const sel=document.getElementById('t0ss2-bal-select');
-        if(!sel||!sel.value||sel.value.length!==42){return;}
-        try{
-            const addr=sel.value;
-            const c=new ethers.Contract(addr,["function balanceOf(address) view returns (uint256)","function symbol() view returns (string)","event Transfer(address indexed from, address indexed to, uint256 value)"],signer);
-            const b=await c.balanceOf(userAddr);
-            document.getElementById('t0ss2-bal-value').innerText=ethers.utils.formatEther(b);
-            
-            let name = sel.options[sel.selectedIndex].getAttribute('data-name');
-            if(name.includes('...')) {
-                try {
-                    name = await c.symbol();
-                    sel.options[sel.selectedIndex].text = name;
-                    sel.options[sel.selectedIndex].setAttribute('data-name', name);
-                } catch(e) { name = 'Token'; }
-            }
-            document.getElementById('t0ss2-bal-token-name').innerText=name;
-            
-            document.getElementById('t0ss2-bal-status').innerText='🟢 Đang tự theo dõi';
-            if(_balContract!==addr){
-                _balContract=addr;
-                c.on('Transfer',(from,to,val)=>{
-                    if(from.toLowerCase()===userAddr.toLowerCase()||to.toLowerCase()===userAddr.toLowerCase()){
-                        refreshBalance();
-                    }
-                });
-            }
-            if(!_balInterval){_balInterval=setInterval(refreshBalance,15000);}
-        }catch(e){document.getElementById('t0ss2-bal-value').innerText='?';document.getElementById('t0ss2-bal-status').innerText='❌ '+e.message;}
-    }
-    async function checkBalance(){
-        if(!signer){toast('error','Hãy kết nối ví trước!');return;}
-        const sel=document.getElementById('t0ss2-bal-select');
-        if(!sel||!sel.value||sel.value.length!==42){toast('error','Hãy chọn coin hợp lệ!');return;}
-        await refreshBalance();
-        toast('success','Đã cập nhật số dư!');
-    }
-    function onTokenChange(){
-        document.getElementById('t0ss2-bal-status').innerText='⏳ Đang tải dữ liệu...';
-        document.getElementById('t0ss2-bal-value').innerText='...';
-        _balContract=null; if(_balInterval){clearInterval(_balInterval);_balInterval=null;}
-        refreshBalance();
-    }
-    return { refreshBalance, checkBalance, onTokenChange };
+    return {  };
 })();
 
-const t0ss3_funcs = (function() {
 
-    async function transferToken(){
-        if(!signer){toast('error','Hãy kết nối ví trước!');return;}
-        const ci=document.getElementById('t0ss3-tf-select'),ai=document.getElementById('t0ss3-tf-address'),mi=document.getElementById('t0ss3-tf-amount');
-        if(!ci||!ci.value||ci.value.length!==42){toast('error','Hãy chọn coin hợp lệ!');return;}
-        const addr=ai.value.trim(),amt=mi.value.trim();
-        if(!addr||!addr.startsWith('0x')||addr.length!==42){toast('error','Địa chỉ ví nhận không hợp lệ!');return;}
-        if(!amt||isNaN(amt)||Number(amt)<=0){toast('error','Số lượng phải lớn hơn 0!');return;}
-        try{
-            const c=new ethers.Contract(ci.value,["function transfer(address,uint256) returns (bool)","function symbol() view returns (string)", "function decimals() view returns (uint8)"],signer);
-            
-            let name = ci.options[ci.selectedIndex].getAttribute('data-name');
-            if(name.includes('...')) {
-                try { name = await c.symbol(); ci.options[ci.selectedIndex].text = name; ci.options[ci.selectedIndex].setAttribute('data-name', name); } 
-                catch(e) { name = 'Token'; }
-            }
-            
-            toast('info','Đang chuyển '+amt+' '+name+'...');
-            let dec = 18; try{dec = await c.decimals();}catch(e){}
-            const tx=await c.transfer(addr,ethers.utils.parseUnits(amt, dec));await tx.wait();
-            toast('success','Chuyển tiền thành công!');ai.value='';mi.value='';
-        }catch(e){toast('error',e.reason||e.message);}
-    }
-    async function onTokenChange(){
-        if(!signer){return;}
-        const ci=document.getElementById('t0ss3-tf-select');
-        if(!ci||!ci.value||ci.value.length!==42){return;}
-        let name = ci.options[ci.selectedIndex].getAttribute('data-name');
-        if(name.includes('...')) {
-            try { 
-                const c=new ethers.Contract(ci.value,["function symbol() view returns (string)"],signer);
-                name = await c.symbol(); 
-                ci.options[ci.selectedIndex].text = name; 
-                ci.options[ci.selectedIndex].setAttribute('data-name', name); 
-            } catch(e) {}
-        }
-    }
-    return { transferToken, onTokenChange };
-})();
-
-    window.refreshAllBalances = function(){t0ss2_funcs.refreshBalance();};
-
-    function bind(){const b=(id,fn,ev='click')=>{const el=document.getElementById(id);if(el)el.addEventListener(ev,fn);};b('t0ss1-web3-connect', t0ss1_funcs.connectWallet, 'click');b('t0ss2-bal-check', t0ss2_funcs.checkBalance, 'click');b('t0ss3-tf-btn', t0ss3_funcs.transferToken, 'click');b('t0ss3-tf-select', t0ss3_funcs.onTokenChange, 'change');}
+    function bind(){const b=(id,fn,ev='click')=>{const el=document.getElementById(id);if(el)el.addEventListener(ev,fn);};b('t0ss1-web3-connect', t0ss1_funcs.connectWallet, 'click');}
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);else bind();
 })();
 </script>

@@ -43,6 +43,8 @@ export default function PreviewArea({ tabs, activeTabId, activeTemplate, onSelec
                     {activeTemplate.slots.map(slot => {
                         const blockId = activeTabObj.slots[slot.id];
                         const block = blockId ? BLOCKS.find(b => b.id === blockId) : null;
+                        const slotKey = `${activeTabObj.id}-${slot.id}`;
+                        const contractData = contracts[slotKey];
 
                         return (
                             <Droppable key={slot.id} droppableId={`slot-${slot.id}`}>
@@ -61,7 +63,7 @@ export default function PreviewArea({ tabs, activeTabId, activeTemplate, onSelec
                                             >
                                                 <button className="pv-remove" onClick={(e) => { e.stopPropagation(); onRemoveFromSlot(slot.id); }}>✕</button>
                                                 <div className="pv-label">{block.label}</div>
-                                                <div dangerouslySetInnerHTML={{ __html: block.preview(config.tokenName || 'TOKEN') }} />
+                                                <div dangerouslySetInnerHTML={{ __html: block.preview(config.tokenName || 'TOKEN', contractData) }} />
                                             </div>
                                         ) : (
                                             <div className="slot-empty">
