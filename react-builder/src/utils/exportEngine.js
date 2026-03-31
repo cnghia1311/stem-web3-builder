@@ -80,7 +80,7 @@ ${code}
                 }
 
                 // 3. Bindings
-                (block.bindings || []).forEach(b => {
+                block.bindings.forEach(b => {
                     const ev = b.event || 'click';
                     allBindCode.push(`b('${pfx}-${b.btn}', ${pfx}_funcs.${b.fn}, '${ev}');`);
                 });

@@ -94,8 +94,7 @@ export default function ConfigPanel({ config, onChange, tabs, onAddTab, onRename
 
                                         {block.config.map(cfg => {
                                             const val = configVals[cfg.key] || '';
-                                            const isAddress = cfg.isAddress !== false && cfg.key !== 'network';
-                                            const hasValue = isAddress ? (val && val.length === 42) : (val && val.length > 0);
+                                            const hasValue = val && val.length === 42;
                                             return (
                                                 <div key={cfg.key} style={{marginBottom: '6px'}}>
                                                     <label style={{ fontSize: '9px', color: '#64748b', fontWeight: 'bold' }}>{cfg.label}</label>
@@ -117,26 +116,6 @@ export default function ConfigPanel({ config, onChange, tabs, onAddTab, onRename
                                                                 resize: 'vertical'
                                                             }}
                                                         />
-                                                    ) : cfg.type === 'select' ? (
-                                                        <select
-                                                            value={val}
-                                                            onChange={e => {
-                                                                e.stopPropagation();
-                                                                onContractChange(slotKey, { ...configVals, [cfg.key]: e.target.value });
-                                                            }}
-                                                            onClick={e => e.stopPropagation()}
-                                                            style={{
-                                                                width: '100%', padding: '6px',
-                                                                border: `1px solid ${hasValue ? '#10b981' : '#fbbf24'}`,
-                                                                borderRadius: '5px', fontSize: '10px', fontFamily: 'monospace',
-                                                                background: hasValue ? '#f0fdf4' : '#fffbeb'
-                                                            }}
-                                                        >
-                                                            <option value="" disabled>-- Chọn mạng lưới --</option>
-                                                            {cfg.options && cfg.options.map(opt => (
-                                                                <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                                            ))}
-                                                        </select>
                                                     ) : (
                                                         <input
                                                             type={cfg.type || 'text'}
@@ -146,7 +125,7 @@ export default function ConfigPanel({ config, onChange, tabs, onAddTab, onRename
                                                                 onContractChange(slotKey, { ...configVals, [cfg.key]: e.target.value });
                                                             }}
                                                             onClick={e => e.stopPropagation()}
-                                                            placeholder={cfg.placeholder || (isAddress ? "0x..." : "Nhập giá trị...")}
+                                                            placeholder="0x..."
                                                             style={{
                                                                 width: '100%', padding: '6px',
                                                                 border: `1px solid ${hasValue ? '#10b981' : '#fbbf24'}`,

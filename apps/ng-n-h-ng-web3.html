@@ -51,11 +51,52 @@
         <button id="t0ss1-web3-connect" style="background:#f59e0b;">🦊 Kết Nối MetaMask</button>
     </div>
             </div>
-            <div class="grid-cell empty" style="grid-column:span 1"></div>
+            <div class="grid-cell" style="grid-column:span 1">
+
+    <div class="khoi" style="border-left-color:#eab308;">
+        <div class="khoi-title" style="color:#facc15;">🏅 THẦY GIÁO CẤP BẰNG (AIRDROP SOULBOUND)</div>
+        <p style="font-size:11px;color:#cbd5e1;margin-bottom:12px;line-height:1.5;">Phát Bằng Khen (ERC1155 Edition Drop) hàng loạt cho học sinh. Chỉ Admin (chủ Contract) mới được phép phát!</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+            <input type="text" id="t0ss2-airdrop-contract" placeholder="🏛️ Mã Hợp Đồng Bằng Khen (0x...)" value="0x71c4c514b723942A7DEa21b7dcE235f9b751897a" style="grid-column:1/-1;background:#0f172a;color:#fff;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;">
+            <input type="text" id="t0ss2-airdrop-tokenid" placeholder="🆔 Token ID (VD: 0)" value="0" style="background:#0f172a;color:#fff;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;">
+            <input type="number" id="t0ss2-airdrop-amount" placeholder="📦 Số lượng/ví (VD: 1)" value="1" style="background:#0f172a;color:#fff;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;">
+        </div>
+
+        <label style="font-size:10px;color:#94a3b8;font-weight:bold;">📋 DANH SÁCH VÍ HỌC SINH (mỗi dòng 1 ví):</label>
+        <textarea id="t0ss2-airdrop-wallets" rows="6" placeholder="0xAbc123...&#10;0xDef456...&#10;0x789Ghi..." style="width:100%;background:#0f172a;color:#e2e8f0;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;font-family:monospace;resize:vertical;margin-bottom:12px;">0xb530Ad83714F5fe04116Cc81810FDc4042214b35
+0x2b259B9dCd4e12CFd82852623C9e2Dcd46a42cb3</textarea>
+
+        <button id="t0ss2-airdrop-btn" style="background:linear-gradient(45deg, #ca8a04, #eab308);width:100%;padding:14px;border-radius:10px;border:none;color:white;font-weight:bold;font-size:14px;cursor:pointer;margin-bottom:10px;">🏅 ĐÓNG MỘC PHÁT BẰNG CHO CẢ LỚP</button>
+
+        <div id="t0ss2-airdrop-log" style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px;max-height:200px;overflow-y:auto;font-size:10px;font-family:monospace;color:#94a3b8;display:none;"></div>
+    </div>
+            </div>
             <div class="grid-cell empty" style="grid-column:span 1"></div>
             <div class="grid-cell empty" style="grid-column:span 1"></div>
             <div class="grid-cell" style="grid-column:span 2">
-<div class="khoi">🖼️ Túi đựng Bằng Khen Cứng...</div>
+
+    <div class="khoi" style="border-left-color:#a855f7;">
+        <div class="khoi-title" style="color:#c084fc;">🏆 BẢNG VINH DANH LỚP HỌC</div>
+        <p style="font-size:11px;color:#cbd5e1;margin-bottom:12px;line-height:1.5;">Kiểm tra Blockchain xem ai trong lớp đã sở hữu Bằng Khen (Soulbound Token) này chưa.</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+            <input type="text" id="t0ss5-honor-contract" placeholder="🏛️ Mã Hợp Đồng Bằng Khen (0x...)" value="0x71c4c514b723942A7DEa21b7dcE235f9b751897a" style="grid-column:1/-1;background:#0f172a;color:#fff;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;">
+            <input type="text" id="t0ss5-honor-tokenid" placeholder="🆔 Token ID (VD: 0)" value="0" style="grid-column:1/-1;background:#0f172a;color:#fff;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;">
+        </div>
+
+        <label style="font-size:10px;color:#94a3b8;font-weight:bold;">📋 DANH SÁCH VÍ CẦN KIỂM TRA:</label>
+        <textarea id="t0ss5-honor-wallets" rows="5" placeholder="0xAbc123...&#10;0xDef456...&#10;0x789Ghi..." style="width:100%;background:#0f172a;color:#e2e8f0;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;font-family:monospace;resize:vertical;margin-bottom:12px;">0xb530Ad83714F5fe04116Cc81810FDc4042214b35
+0x2b259B9dCd4e12CFd82852623C9e2Dcd46a42cb3</textarea>
+
+        <button id="t0ss5-honor-btn" style="background:linear-gradient(45deg, #7c3aed, #a855f7);width:100%;padding:14px;border-radius:10px;border:none;color:white;font-weight:bold;font-size:14px;cursor:pointer;margin-bottom:12px;">🔍 KIỂM TRA BẢN PHONG THẦN</button>
+
+        <div id="t0ss5-honor-grid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));gap:8px;">
+            <div style="text-align:center;grid-column:1/-1;color:#64748b;font-size:12px;padding:15px;">
+                Dán danh sách ví rồi bấm "Kiểm Tra" để xem ai đã có Bằng...
+            </div>
+        </div>
+    </div>
             </div>
             <div class="grid-cell empty" style="grid-column:span 1"></div>
             <div class="grid-cell empty" style="grid-column:span 1"></div>
@@ -99,13 +140,190 @@ const t0ss1_funcs = (function() {
     return { connectWallet };
 })();
 
+const t0ss2_funcs = (function() {
+
+    async function doAirdrop() {
+        if(!signer){toast('error','Kết nối Ví trước!');return;}
+        const contractAddr = document.getElementById('t0ss2-airdrop-contract').value.trim();
+        const tokenId = document.getElementById('t0ss2-airdrop-tokenid').value.trim();
+        const amountPer = document.getElementById('t0ss2-airdrop-amount').value.trim() || '1';
+        const walletsText = document.getElementById('t0ss2-airdrop-wallets').value.trim();
+        const btn = document.getElementById('t0ss2-airdrop-btn');
+        const log = document.getElementById('t0ss2-airdrop-log');
+
+        if(!contractAddr || contractAddr.length !== 42) { toast('error','Nhập Mã Hợp Đồng hợp lệ!'); return; }
+        if(tokenId === '') { toast('error','Nhập Token ID!'); return; }
+        if(!walletsText) { toast('error','Dán danh sách Ví học sinh vào!'); return; }
+
+        const wallets = walletsText.split(/[\n,]+/).map(w => w.trim()).filter(w => w.length === 42 && w.startsWith('0x'));
+        if(wallets.length === 0) { toast('error','Không tìm thấy ví hợp lệ nào!'); return; }
+
+        log.style.display = 'block';
+        log.innerHTML = '🚀 Chuẩn bị phát bằng cho ' + wallets.length + ' học sinh trong 1 NỐT NHẠC...\n';
+
+        try {
+            btn.disabled = true;
+            btn.innerText = '⏳ ĐANG GOM LỆNH...';
+
+            const claimIface = new ethers.utils.Interface([
+                "function claim(address receiver, uint256 tokenId, uint256 quantity, address currency, uint256 pricePerToken, (bytes32[] proof, uint256 quantityLimitPerWallet, uint256 pricePerToken, address currency) allowlistProof, bytes data)"
+            ]);
+            const multicallContract = new ethers.Contract(contractAddr, [
+                "function multicall(bytes[] data) returns (bytes[] results)",
+                "function claim(address receiver, uint256 tokenId, uint256 quantity, address currency, uint256 pricePerToken, (bytes32[] proof, uint256 quantityLimitPerWallet, uint256 pricePerToken, address currency) allowlistProof, bytes data) payable"
+            ], signer);
+
+            const proof = [[], 0, 0, '0x0000000000000000000000000000000000000000'];
+            const nativeCurrency = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
+            const calls = [];
+
+            for(const w of wallets) {
+                const shortW = w.substring(0,6) + '...' + w.slice(-4);
+                log.innerHTML += '\n📋 Gom lệnh cho ' + shortW;
+                const encoded = claimIface.encodeFunctionData('claim', [w, tokenId, amountPer, nativeCurrency, 0, proof, '0x']);
+                calls.push(encoded);
+            }
+
+            log.innerHTML += '\n\n🔫 Bắn 1 phát ' + calls.length + ' viên đạn... Ký MetaMask!';
+            log.scrollTop = log.scrollHeight;
+            btn.innerText = '⏳ KÝ METAMASK...';
+
+            try {
+                const tx = await multicallContract.multicall(calls);
+                log.innerHTML += '\n⏳ Đang xử lý trên Blockchain...';
+                log.scrollTop = log.scrollHeight;
+                await tx.wait();
+                log.innerHTML += '\n\n🏁 HOÀN TẤT! ✅ ' + wallets.length + '/' + wallets.length + ' bằng khen đã phát xong!';
+                log.innerHTML += '\n🧾 TX: ' + tx.hash;
+                toast('success', 'Phát bằng hàng loạt thành công! ' + wallets.length + ' học sinh!');
+            } catch(eMulti) {
+                log.innerHTML += '\n⚠️ Multicall lỗi, chuyển sang phát từng em...';
+                log.scrollTop = log.scrollHeight;
+                let success = 0, failed = 0;
+                for(let i = 0; i < wallets.length; i++) {
+                    const w = wallets[i];
+                    const shortW = w.substring(0,6) + '...' + w.slice(-4);
+                    log.innerHTML += '\n📤 [' + (i+1) + '/' + wallets.length + '] ' + shortW + '...';
+                    try {
+                        const tx = await multicallContract.claim(w, tokenId, amountPer, nativeCurrency, 0, proof, '0x');
+                        await tx.wait();
+                        log.innerHTML += ' ✅';
+                        success++;
+                    } catch(e2) {
+                        log.innerHTML += ' ❌ ' + (e2.reason || 'Lỗi');
+                        failed++;
+                    }
+                    log.scrollTop = log.scrollHeight;
+                }
+                log.innerHTML += '\n\n🏁 HOÀN TẤT! ✅ ' + success + ', ❌ ' + failed;
+                toast(failed === 0 ? 'success' : 'error', success + '/' + wallets.length + ' thành công!');
+            }
+
+            btn.innerText = '🏅 PHÁT BẰNG TIẾP';
+            btn.disabled = false;
+
+        } catch(e) {
+            log.innerHTML += '\n❌ LỖI: ' + (e.reason || e.message);
+            btn.innerText = '🏅 ĐÓNG MỘC PHÁT BẰNG CHO CẢ LỚP';
+            btn.disabled = false;
+            toast('error', e.reason || e.message || 'Lỗi phát bằng!');
+        }
+    }
+    
+    return { doAirdrop };
+})();
+
 const t0ss5_funcs = (function() {
 
-    return {  };
+    async function checkHonorRoll() {
+        if(!signer){toast('error','Kết nối Ví trước!');return;}
+        const contractAddr = document.getElementById('t0ss5-honor-contract').value.trim();
+        const tokenId = document.getElementById('t0ss5-honor-tokenid').value.trim();
+        const walletsText = document.getElementById('t0ss5-honor-wallets').value.trim();
+        const btn = document.getElementById('t0ss5-honor-btn');
+        const grid = document.getElementById('t0ss5-honor-grid');
+
+        if(!contractAddr || contractAddr.length !== 42) { toast('error','Nhập Mã Hợp Đồng hợp lệ!'); return; }
+        if(tokenId === '') { toast('error','Nhập Token ID!'); return; }
+        if(!walletsText) { toast('error','Dán danh sách Ví cần kiểm tra!'); return; }
+
+        const wallets = walletsText.split(/[\n,]+/).map(w => w.trim()).filter(w => w.length === 42 && w.startsWith('0x'));
+        if(wallets.length === 0) { toast('error','Không tìm thấy ví hợp lệ nào!'); return; }
+
+        try {
+            btn.disabled = true;
+            btn.innerText = '⏳ ĐANG QUÉT BLOCKCHAIN...';
+            grid.innerHTML = '<div style="text-align:center;grid-column:1/-1;color:#c084fc;font-size:12px;">Đang kiểm tra ' + wallets.length + ' địa chỉ...</div>';
+
+            const contract = new ethers.Contract(contractAddr, [
+                "function balanceOf(address account, uint256 id) view returns (uint256)",
+                "function uri(uint256) view returns (string)"
+            ], signer);
+
+            // Thử load metadata ảnh Bằng Khen
+            let certImg = '';
+            let certName = 'Bằng Khen #' + tokenId;
+            try {
+                const rawUri = await contract.uri(tokenId);
+                const ipfsUri = rawUri.replace('ipfs://', 'https://ipfs.io/ipfs/').replace('{id}', tokenId);
+                const res = await fetch(ipfsUri);
+                const metadata = await res.json();
+                certImg = metadata.image ? metadata.image.replace('ipfs://', 'https://ipfs.io/ipfs/') : '';
+                certName = metadata.name || certName;
+            } catch(e) {}
+
+            grid.innerHTML = '';
+            let holders = 0;
+
+            for(const w of wallets) {
+                const shortW = w.substring(0,6) + '...' + w.slice(-4);
+                let hasToken = false;
+                try {
+                    const bal = await contract.balanceOf(w, tokenId);
+                    hasToken = bal.gt(0);
+                } catch(e) {
+                    // Fallback ERC721: thử ownerOf hoặc balanceOf(address)
+                    try {
+                        const c721 = new ethers.Contract(contractAddr, ["function balanceOf(address) view returns (uint256)"], signer);
+                        const bal721 = await c721.balanceOf(w);
+                        hasToken = bal721.gt(0);
+                    } catch(e2) {}
+                }
+
+                if(hasToken) holders++;
+
+                const card = document.createElement('div');
+                card.style.cssText = hasToken
+                    ? 'background:linear-gradient(135deg, #065f46, #047857);border:2px solid #10b981;border-radius:10px;padding:10px;text-align:center;'
+                    : 'background:#1e293b;border:1px solid #334155;border-radius:10px;padding:10px;text-align:center;opacity:0.6;';
+                const imgHtml = (hasToken && certImg) 
+                    ? `<img src="${certImg}" style="width:100%;max-height:80px;object-fit:cover;border-radius:6px;margin-bottom:6px;border:1px solid #34d399;" alt="${certName}">` 
+                    : `<div style="font-size:24px;margin-bottom:4px;">${hasToken ? '🎓' : '❌'}</div>`;
+
+                card.innerHTML = `
+                    ${imgHtml}
+                    <div style="font-size:10px;font-weight:bold;color:${hasToken ? '#34d399' : '#94a3b8'};">${hasToken ? 'ĐÃ TỐT NGHIỆP' : 'CHƯA CÓ'}</div>
+                    <div style="font-size:9px;color:#64748b;margin-top:4px;font-family:monospace;">${shortW}</div>
+                `;
+                grid.appendChild(card);
+            }
+
+            toast('success', 'Kiểm tra xong! ' + holders + '/' + wallets.length + ' đã sở hữu Bằng Khen!');
+            btn.innerText = '🔍 KIỂM TRA LẠI';
+            btn.disabled = false;
+
+        } catch(e) {
+            btn.innerText = '🔍 KIỂM TRA BẢN PHONG THẦN';
+            btn.disabled = false;
+            grid.innerHTML = '<div style="text-align:center;grid-column:1/-1;color:#ef4444;font-size:12px;padding:20px;">Lỗi: ' + (e.reason || e.message) + '</div>';
+        }
+    }
+    
+    return { checkHonorRoll };
 })();
 
 
-    function bind(){const b=(id,fn,ev='click')=>{const el=document.getElementById(id);if(el)el.addEventListener(ev,fn);};b('t0ss1-web3-connect', t0ss1_funcs.connectWallet, 'click');}
+    function bind(){const b=(id,fn,ev='click')=>{const el=document.getElementById(id);if(el)el.addEventListener(ev,fn);};b('t0ss1-web3-connect', t0ss1_funcs.connectWallet, 'click');b('t0ss2-airdrop-btn', t0ss2_funcs.doAirdrop, 'click');b('t0ss5-honor-btn', t0ss5_funcs.checkHonorRoll, 'click');}
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);else bind();
 })();
 </script>
