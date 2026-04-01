@@ -80,10 +80,12 @@ ${code}
                 }
 
                 // 3. Bindings
-                block.bindings.forEach(b => {
-                    const ev = b.event || 'click';
-                    allBindCode.push(`b('${pfx}-${b.btn}', ${pfx}_funcs.${b.fn}, '${ev}');`);
-                });
+                if (block.bindings) {
+                    block.bindings.forEach(b => {
+                        const ev = b.event || 'click';
+                        allBindCode.push(`b('${pfx}-${b.btn}', ${pfx}_funcs.${b.fn}, '${ev}');`);
+                    });
+                }
             } else {
                 slotsHtml += `
             <div class="grid-cell empty" style="grid-column:span ${slot.span}"></div>`;

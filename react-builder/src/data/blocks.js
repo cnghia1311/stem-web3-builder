@@ -339,6 +339,11 @@ export const BLOCKS = [
             <input type="text" id="swap-out-addr" placeholder="Địa chỉ Token ERC-20 (0x...)" value="0x6AECC697301E8867052C2D8fB03F68ef809a1A40" style="width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:13px;outline:none;">
         </div>
 
+        <div id="swap-quote" style="background:rgba(16,185,129,0.08);border:1px solid #334155;border-radius:10px;padding:12px;margin-bottom:15px;text-align:center;min-height:44px;display:flex;align-items:center;justify-content:center;gap:8px;">
+            <span style="color:#94a3b8;font-size:12px;">💱 Ước tính nhận:</span>
+            <span id="swap-quote-value" style="color:#10b981;font-weight:bold;font-size:16px;">---</span>
+        </div>
+
         <button id="swap-execute-btn" style="background:linear-gradient(45deg, #ec4899, #f43f5e);width:100%;padding:14px;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;color:white;transition:all 0.2s;box-shadow:0 4px 15px rgba(236,72,153,0.3);">🚀 THỰC HIỆN SWAP</button>
         <div id="swap-status" style="margin-top:15px;font-size:12px;text-align:center;color:#94a3b8;min-height:20px;"></div>
     </div>`;
@@ -354,6 +359,15 @@ export const BLOCKS = [
             "polygon":  { r: "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45", w: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270" },
             "arbitrum": { r: "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45", w: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1" }
         };
+        const QUOTERS = {
+            "sepolia":  "0xEd1f6473345F45b75F8179591dd5bA1888cf2FB3",
+            "ethereum": "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
+            "base":     "0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a",
+            "bsc":      "0xB048Bbc1Ee6b733FFfCFb9e9CeF7375518e25997",
+            "polygon":  "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
+            "arbitrum": "0x61fFE014bA17989E743c5F6cB21bF9697530B21e"
+        };
+        const _nativeSym = {sepolia:'ETH',ethereum:'ETH',base:'ETH',bsc:'BNB',polygon:'MATIC',arbitrum:'ETH'};
 
         const inRadios = document.querySelectorAll('${pfx}-\\[name="token_in_type"\\]');
         // Wait, exportEngine replaces id="...", but not name="..."! So they stay as name="token_in_type".
@@ -401,8 +415,59 @@ export const BLOCKS = [
             outRadios.forEach(r => r.addEventListener('change', updateInputs));
             updateInputs();
 
+            // === ƯỚC TÍNH GIÁ (QUOTE) ===
+            const quoteEl = container.querySelector('#${pfx}-swap-quote-value');
+            let _qTimer = null;
+            const getQuote = async () => {
+                if (!quoteEl) return;
+                if (!signer) { quoteEl.innerText = 'Kết nối ví trước'; return; }
+                const amtVal = amtInp.value.trim();
+                if (!amtVal || isNaN(amtVal) || Number(amtVal) <= 0) { quoteEl.innerText = '---'; return; }
+                const _isIn = [...inRadios].find(r=>r.checked).value;
+                const _isOut = [...outRadios].find(r=>r.checked).value;
+                if (_isIn==='native' && _isOut==='native') { quoteEl.innerText = '---'; return; }
+                const _net = netSel.value;
+                if (!NETWORKS[_net] || !QUOTERS[_net]) { quoteEl.innerText = '?'; return; }
+                const _WETH = NETWORKS[_net].w;
+                const _FEE = parseInt(feeSel.value);
+                let _tIn = _isIn==='native' ? _WETH : inAddr.value.trim();
+                let _tOut = _isOut==='native' ? _WETH : outAddr.value.trim();
+                if (!_tIn||_tIn.length!==42||!_tOut||_tOut.length!==42) { quoteEl.innerText = '---'; return; }
+                try {
+                    quoteEl.innerText = '⏳ ...';
+                    quoteEl.style.color = '#94a3b8';
+                    let _dIn = 18;
+                    if (_isIn!=='native') { try { _dIn = await new ethers.Contract(_tIn,["function decimals() view returns(uint8)"],signer).decimals(); } catch(e){} }
+                    const _amtIn = ethers.utils.parseUnits(amtVal, _dIn);
+                    const _q = new ethers.Contract(QUOTERS[_net],[
+                        "function quoteExactInputSingle(tuple(address tokenIn,address tokenOut,uint256 amountIn,uint24 fee,uint160 sqrtPriceLimitX96)) public returns(uint256 amountOut,uint160,uint32,uint256)"
+                    ], signer);
+                    const _res = await _q.callStatic.quoteExactInputSingle({ tokenIn:_tIn, tokenOut:_tOut, amountIn:_amtIn, fee:_FEE, sqrtPriceLimitX96:0 });
+                    let _dOut=18, _sym='';
+                    if (_isOut!=='native') {
+                        try { const _c=new ethers.Contract(_tOut,["function decimals() view returns(uint8)","function symbol() view returns(string)"],signer); _dOut=await _c.decimals(); _sym=await _c.symbol(); } catch(e){ _sym='Token'; }
+                    } else { _sym = _nativeSym[_net]||'ETH'; }
+                    const _outAmt = _res.amountOut || _res[0];
+                    const _fmtd = parseFloat(ethers.utils.formatUnits(_outAmt, _dOut));
+                    quoteEl.innerText = '≈ ' + _fmtd.toLocaleString('en-US',{maximumFractionDigits:6}) + ' ' + _sym;
+                    quoteEl.style.color = '#10b981';
+                } catch(e) {
+                    console.log('Quote err:', e);
+                    quoteEl.innerText = 'Pool chưa khả dụng';
+                    quoteEl.style.color = '#f59e0b';
+                }
+            }
+            const triggerQuote = () => { if(_qTimer) clearTimeout(_qTimer); _qTimer=setTimeout(getQuote,600); };
+            amtInp.addEventListener('input', triggerQuote);
+            inRadios.forEach(r => r.addEventListener('change', triggerQuote));
+            outRadios.forEach(r => r.addEventListener('change', triggerQuote));
+            netSel.addEventListener('change', triggerQuote);
+            feeSel.addEventListener('change', triggerQuote);
+            inAddr.addEventListener('input', triggerQuote);
+            outAddr.addEventListener('input', triggerQuote);
+
             execBtn.addEventListener('click', async () => {
-                if(typeof window.signer === 'undefined' || !window.signer){
+                if(!signer){
                     toast('error', 'Cần Kết Nối Ví (🦊) trước!'); return;
                 }
 
@@ -440,15 +505,15 @@ export const BLOCKS = [
                         "function unwrapWETH9(uint256 amountMinimum, address recipient) payable",
                         "function multicall(uint256 deadline, bytes[] data) payable returns (bytes[] results)"
                     ];
-                    const router = new ethers.Contract(V3_ROUTER, routerAbi, window.signer);
+                    const router = new ethers.Contract(V3_ROUTER, routerAbi, signer);
                     const iface = new ethers.utils.Interface(routerAbi);
-                    const userAddr = await window.signer.getAddress();
+                    const userAddr = await signer.getAddress();
 
                     if (isEqIn === 'native') {
                         // NATIVE -> ERC20: Send native ETH, exactInputSingle handles Wrap internally if WETH is tokenIn and msg.value is sent
                         stt.innerText = "Kiểm tra số dư Native Token...";
                         const ethAmount = ethers.utils.parseEther(amtVal);
-                        const ethBal = await window.provider.getBalance(userAddr);
+                        const ethBal = await provider.getBalance(userAddr);
                         if(ethBal.lt(ethAmount)) throw new Error('Không đủ số dư Native Token!');
 
                         stt.innerHTML = '<span style="color:#3b82f6;">Chờ ký xác nhận Swap trên MetaMask...</span>';
@@ -470,7 +535,7 @@ export const BLOCKS = [
                     } else if (isEqOut === 'native') {
                         // ERC20 -> NATIVE: Approve, Multicall(Swap ERC20->WETH, UnwrapWETH9)
                         const erc20Abi = ["function approve(address,uint256) returns(bool)", "function decimals() view returns(uint8)"];
-                        const tIn = new ethers.Contract(tokenIn, erc20Abi, window.signer);
+                        const tIn = new ethers.Contract(tokenIn, erc20Abi, signer);
                         let dec = 18; try { dec = await tIn.decimals(); }catch(e){}
                         const amtTIn = ethers.utils.parseUnits(amtVal, dec);
 
@@ -500,7 +565,7 @@ export const BLOCKS = [
                     } else {
                         // ERC20 -> ERC20: Approve, exactInputSingle
                         const erc20Abi = ["function approve(address,uint256) returns(bool)", "function decimals() view returns(uint8)"];
-                        const tIn = new ethers.Contract(tokenIn, erc20Abi, window.signer);
+                        const tIn = new ethers.Contract(tokenIn, erc20Abi, signer);
                         let dec = 18; try { dec = await tIn.decimals(); }catch(e){}
                         const amtTIn = ethers.utils.parseUnits(amtVal, dec);
 

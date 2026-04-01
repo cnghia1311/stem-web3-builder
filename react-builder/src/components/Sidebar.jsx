@@ -20,9 +20,10 @@ export default function Sidebar() {
 
     // Hàm phụ trợ để render từng Draggable Block
     const renderDraggableBlock = (b) => {
+        if (!b) return null;
         const idx = draggablesRendered++;
         return (
-            <Draggable key={b.id + '-' + idx} draggableId={`sidebar-${b.id}`} index={idx}>
+            <Draggable key={(b.id || 'err') + '-' + idx} draggableId={`sidebar-${b.id || 'err'}`} index={idx}>
                 {(provided, snapshot) => (
                     <>
                         <div
@@ -56,7 +57,7 @@ export default function Sidebar() {
 
     if (isSearching) {
         // Nếu đang tìm kiếm: Xóa bỏ mọi tab/phân nhóm, trải phẳng danh sách
-        const matched = BLOCKS.filter(b => b.name.toLowerCase().includes(lowerQuery) || b.desc.toLowerCase().includes(lowerQuery));
+        const matched = BLOCKS.filter(b => b && b.name && (b.name.toLowerCase().includes(lowerQuery) || (b.desc && b.desc.toLowerCase().includes(lowerQuery))));
         renderUI = (
             <div style={{ marginTop: '10px' }}>
                 {matched.length === 0 && <div style={{color: '#94a3b8', fontSize: '12px', textAlign: 'center'}}>Không tìm thấy khối nào...</div>}
@@ -66,7 +67,7 @@ export default function Sidebar() {
     } else if (mode === 'guided') {
         // Chế độ Bài học (Guided)
         const lesson = LESSONS.find(l => l.id === lessonId);
-        const matched = BLOCKS.filter(b => lesson.blocks.includes(b.id));
+        const matched = lesson && lesson.blocks ? lesson.blocks.map(id => BLOCKS.find(b => b && b.id === id)).filter(Boolean) : [];
         renderUI = (
             <>
                 <div style={{ padding: '10px', background: '#f8fafc', marginBottom: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
@@ -85,7 +86,7 @@ export default function Sidebar() {
     } else {
         // Chế độ Tự do (Sandbox Categories)
         renderUI = CATEGORIES.map(cat => {
-            const hasBlocks = cat.blocks === 'all' ? BLOCKS : BLOCKS.filter(b => cat.blocks.includes(b.id));
+            const hasBlocks = cat.blocks === 'all' ? BLOCKS.filter(Boolean) : cat.blocks.map(id => BLOCKS.find(b => b && b.id === id)).filter(Boolean);
             const isExpanded = expandedCategories[cat.id];
             
             return (

@@ -53,49 +53,103 @@
             </div>
             <div class="grid-cell" style="grid-column:span 1">
 
-    <div class="khoi" style="border-left-color:#eab308;">
-        <div class="khoi-title" style="color:#facc15;">🏅 THẦY GIÁO CẤP BẰNG (AIRDROP SOULBOUND)</div>
-        <p style="font-size:11px;color:#cbd5e1;margin-bottom:12px;line-height:1.5;">Phát Bằng Khen (ERC1155 Edition Drop) hàng loạt cho học sinh. Chỉ Admin (chủ Contract) mới được phép phát!</p>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
-            <input type="text" id="t0ss2-airdrop-contract" placeholder="🏛️ Mã Hợp Đồng Bằng Khen (0x...)" value="0x71c4c514b723942A7DEa21b7dcE235f9b751897a" style="grid-column:1/-1;background:#0f172a;color:#fff;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;">
-            <input type="text" id="t0ss2-airdrop-tokenid" placeholder="🆔 Token ID (VD: 0)" value="0" style="background:#0f172a;color:#fff;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;">
-            <input type="number" id="t0ss2-airdrop-amount" placeholder="📦 Số lượng/ví (VD: 1)" value="1" style="background:#0f172a;color:#fff;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;">
+    <div class="khoi" style="border-left-color:#ec4899;background:rgba(236,72,153,0.05);padding:20px;max-width:450px;margin:0 auto;">
+        <div class="khoi-title" style="color:#f472b6;font-size:14px;display:flex;align-items:center;margin-bottom:15px;justify-content:center;">
+            <span style="font-size:22px;margin-right:8px;">🦄</span> TRẠM HOÁN ĐỔI V3
         </div>
 
-        <label style="font-size:10px;color:#94a3b8;font-weight:bold;">📋 DANH SÁCH VÍ HỌC SINH (mỗi dòng 1 ví):</label>
-        <textarea id="t0ss2-airdrop-wallets" rows="6" placeholder="0xAbc123...&#10;0xDef456...&#10;0x789Ghi..." style="width:100%;background:#0f172a;color:#e2e8f0;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;font-family:monospace;resize:vertical;margin-bottom:12px;">0xb530Ad83714F5fe04116Cc81810FDc4042214b35
-0x2b259B9dCd4e12CFd82852623C9e2Dcd46a42cb3</textarea>
+        <div style="display:flex;gap:10px;margin-bottom:15px;">
+            <select id="t0ss2-swap-network-sel" style="flex:1;padding:10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:13px;outline:none;">
+                <option value="sepolia">Sepolia Testnet (ETH)</option>
+                <option value="ethereum">Ethereum Mainnet (ETH)</option>
+                <option value="base">Base (ETH)</option>
+                <option value="bsc">BNB Smart Chain (BNB)</option>
+                <option value="polygon">Polygon POS (MATIC)</option>
+                <option value="arbitrum">Arbitrum (ETH)</option>
+            </select>
+            <select id="t0ss2-swap-fee-sel" style="width:110px;padding:10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:13px;outline:none;">
+                <option value="500">0.05%</option>
+                <option value="3000" selected>0.3%</option>
+                <option value="10000">1%</option>
+            </select>
+        </div>
 
-        <button id="t0ss2-airdrop-btn" style="background:linear-gradient(45deg, #ca8a04, #eab308);width:100%;padding:14px;border-radius:10px;border:none;color:white;font-weight:bold;font-size:14px;cursor:pointer;margin-bottom:10px;">🏅 ĐÓNG MỘC PHÁT BẰNG CHO CẢ LỚP</button>
+        <!-- Token IN -->
+        <div style="background:#0f172a;border:1px solid #334155;border-radius:12px;padding:15px;margin-bottom:10px;position:relative;">
+            <label style="display:block;font-size:12px;color:#94a3b8;margin-bottom:8px;font-weight:bold;">Đồng bạn bán (Token IN)</label>
+            <div style="display:flex;gap:15px;margin-bottom:10px;">
+                <label style="font-size:13px;color:#e2e8f0;display:flex;align-items:center;cursor:pointer;">
+                    <input type="radio" name="token_in_type" value="native" checked style="margin-right:5px;accent-color:#ec4899;"> Native Token
+                </label>
+                <label style="font-size:13px;color:#e2e8f0;display:flex;align-items:center;cursor:pointer;">
+                    <input type="radio" name="token_in_type" value="erc20" style="margin-right:5px;accent-color:#ec4899;"> ERC-20
+                </label>
+            </div>
+            <input type="text" id="t0ss2-swap-in-addr" disabled placeholder="Native Token (Tự động)" style="width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:13px;outline:none;margin-bottom:10px;opacity:0.6;">
+            <input type="number" id="t0ss2-swap-amount" placeholder="0.0" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ec4899;background:#1e293b;color:white;font-size:18px;font-weight:bold;outline:none;">
+        </div>
 
-        <div id="t0ss2-airdrop-log" style="background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px;max-height:200px;overflow-y:auto;font-size:10px;font-family:monospace;color:#94a3b8;display:none;"></div>
+        <div style="text-align:center;margin:-15px 0;position:relative;z-index:10;">
+            <div style="display:inline-flex;background:#1e293b;border:4px solid #0f172a;border-radius:50%;padding:8px;color:#94a3b8;cursor:pointer;">
+                ⬇️
+            </div>
+        </div>
+
+        <!-- Token OUT -->
+        <div style="background:#0f172a;border:1px solid #334155;border-radius:12px;padding:15px;margin-bottom:20px;">
+            <label style="display:block;font-size:12px;color:#94a3b8;margin-bottom:8px;font-weight:bold;">Đồng bạn mua (Token OUT)</label>
+            <div style="display:flex;gap:15px;margin-bottom:10px;">
+                <label style="font-size:13px;color:#e2e8f0;display:flex;align-items:center;cursor:pointer;">
+                    <input type="radio" name="token_out_type" value="native" style="margin-right:5px;accent-color:#ec4899;"> Native Token
+                </label>
+                <label style="font-size:13px;color:#e2e8f0;display:flex;align-items:center;cursor:pointer;">
+                    <input type="radio" name="token_out_type" value="erc20" checked style="margin-right:5px;accent-color:#ec4899;"> ERC-20
+                </label>
+            </div>
+            <input type="text" id="t0ss2-swap-out-addr" placeholder="Địa chỉ Token ERC-20 (0x...)" value="0x6AECC697301E8867052C2D8fB03F68ef809a1A40" style="width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:13px;outline:none;">
+        </div>
+
+        <div id="t0ss2-swap-quote" style="background:rgba(16,185,129,0.08);border:1px solid #334155;border-radius:10px;padding:12px;margin-bottom:15px;text-align:center;min-height:44px;display:flex;align-items:center;justify-content:center;gap:8px;">
+            <span style="color:#94a3b8;font-size:12px;">💱 Ước tính nhận:</span>
+            <span id="t0ss2-swap-quote-value" style="color:#10b981;font-weight:bold;font-size:16px;">---</span>
+        </div>
+
+        <button id="t0ss2-swap-execute-btn" style="background:linear-gradient(45deg, #ec4899, #f43f5e);width:100%;padding:14px;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;color:white;transition:all 0.2s;box-shadow:0 4px 15px rgba(236,72,153,0.3);">🚀 THỰC HIỆN SWAP</button>
+        <div id="t0ss2-swap-status" style="margin-top:15px;font-size:12px;text-align:center;color:#94a3b8;min-height:20px;"></div>
     </div>
             </div>
             <div class="grid-cell empty" style="grid-column:span 1"></div>
             <div class="grid-cell empty" style="grid-column:span 1"></div>
             <div class="grid-cell" style="grid-column:span 2">
 
-    <div class="khoi" style="border-left-color:#a855f7;">
-        <div class="khoi-title" style="color:#c084fc;">🏆 BẢNG VINH DANH LỚP HỌC</div>
-        <p style="font-size:11px;color:#cbd5e1;margin-bottom:12px;line-height:1.5;">Kiểm tra Blockchain xem ai trong lớp đã sở hữu Bằng Khen (Soulbound Token) này chưa.</p>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
-            <input type="text" id="t0ss5-honor-contract" placeholder="🏛️ Mã Hợp Đồng Bằng Khen (0x...)" value="0x71c4c514b723942A7DEa21b7dcE235f9b751897a" style="grid-column:1/-1;background:#0f172a;color:#fff;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;">
-            <input type="text" id="t0ss5-honor-tokenid" placeholder="🆔 Token ID (VD: 0)" value="0" style="grid-column:1/-1;background:#0f172a;color:#fff;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;">
+    <div class="khoi" style="border-left-color:#3b82f6;background:rgba(59,130,246,0.05);padding:15px;">
+        <div class="khoi-title" style="color:#60a5fa;font-size:13px;display:flex;align-items:center;margin-bottom:12px;">
+            <span style="font-size:18px;margin-right:5px;">📈</span> BIỂU ĐỒ GIÁ TRỰC TIẾP
         </div>
-
-        <label style="font-size:10px;color:#94a3b8;font-weight:bold;">📋 DANH SÁCH VÍ CẦN KIỂM TRA:</label>
-        <textarea id="t0ss5-honor-wallets" rows="5" placeholder="0xAbc123...&#10;0xDef456...&#10;0x789Ghi..." style="width:100%;background:#0f172a;color:#e2e8f0;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;font-family:monospace;resize:vertical;margin-bottom:12px;">0xb530Ad83714F5fe04116Cc81810FDc4042214b35
-0x2b259B9dCd4e12CFd82852623C9e2Dcd46a42cb3</textarea>
-
-        <button id="t0ss5-honor-btn" style="background:linear-gradient(45deg, #7c3aed, #a855f7);width:100%;padding:14px;border-radius:10px;border:none;color:white;font-weight:bold;font-size:14px;cursor:pointer;margin-bottom:12px;">🔍 KIỂM TRA BẢN PHONG THẦN</button>
-
-        <div id="t0ss5-honor-grid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));gap:8px;">
-            <div style="text-align:center;grid-column:1/-1;color:#64748b;font-size:12px;padding:15px;">
-                Dán danh sách ví rồi bấm "Kiểm Tra" để xem ai đã có Bằng...
-            </div>
+        <div style="display:flex;gap:8px;margin-bottom:15px;flex-wrap:wrap;">
+             <select class="gecko-net-sel" style="width:160px;padding:10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:13px;margin-bottom:0;">
+                 <option value="sepolia-testnet">Sepolia Testnet</option>
+                 <option value="eth">Ethereum Mainnet</option>
+                 <option value="bsc">BNB Smart Chain</option>
+                 <option value="polygon_pos">Polygon POS</option>
+                 <option value="base">Base</option>
+                 <option value="arbitrum">Arbitrum</option>
+             </select>
+             <input type="text" class="gecko-pool-inp" placeholder="Địa chỉ Pool (0x...)" value="0xB09f73508e137B772F5ed0464badF99b6e3290A4" style="flex:1;min-width:200px;padding:10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:13px;margin-bottom:0;">
+             <button onclick="var c=this.closest('.khoi');var net=c.querySelector('.gecko-net-sel').value;var pool=c.querySelector('.gecko-pool-inp').value.trim();var iframe=c.querySelector('iframe');if(pool&amp;&amp;pool.length===42&amp;&amp;pool.startsWith('0x')){iframe.src='https://www.geckoterminal.com/'+net+'/pools/'+pool+'?embed=1&amp;info=0&amp;swaps=0';}else{alert('Pool không hợp lệ (42 ký tự, bắt đầu 0x)');}" style="background:#3b82f6;color:white;border:none;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:bold;cursor:pointer;width:auto;margin-top:0;">Tải</button>
         </div>
+        <div style="width:100%;height:500px;border-radius:10px;overflow:hidden;border:1px solid #334155;background:#0f172a;">
+            <iframe 
+                height="100%" 
+                width="100%" 
+                title="GeckoTerminal Chart" 
+                src="https://www.geckoterminal.com/sepolia-testnet/pools/0xB09f73508e137B772F5ed0464badF99b6e3290A4?embed=1&info=0&swaps=0" 
+                frameborder="0" 
+                allow="clipboard-write" 
+                allowfullscreen>
+            </iframe>
+        </div>
+        <p style="font-size:10px;color:#64748b;text-align:center;margin-top:8px;">Dữ liệu cung cấp bởi GeckoTerminal</p>
     </div>
             </div>
             <div class="grid-cell empty" style="grid-column:span 1"></div>
@@ -142,188 +196,272 @@ const t0ss1_funcs = (function() {
 
 const t0ss2_funcs = (function() {
 
-    async function doAirdrop() {
-        if(!signer){toast('error','Kết nối Ví trước!');return;}
-        const contractAddr = document.getElementById('t0ss2-airdrop-contract').value.trim();
-        const tokenId = document.getElementById('t0ss2-airdrop-tokenid').value.trim();
-        const amountPer = document.getElementById('t0ss2-airdrop-amount').value.trim() || '1';
-        const walletsText = document.getElementById('t0ss2-airdrop-wallets').value.trim();
-        const btn = document.getElementById('t0ss2-airdrop-btn');
-        const log = document.getElementById('t0ss2-airdrop-log');
+    {
+        const NETWORKS = {
+            "sepolia":  { r: "0x3bFA4769FB09eefC5a80d6E87c3B9C650f7Ae48E", w: "0xfFf9976782d46CC05630D1f6eBAb18b2324d6B14" },
+            "ethereum": { r: "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45", w: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2" },
+            "base":     { r: "0x2626664c2603336E57B271c5C0b26F421741e481", w: "0x4200000000000000000000000000000000000006" },
+            "bsc":      { r: "0xB971eF87ede563556b2ED4b1C0b0019111Dd85d2", w: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c" },
+            "polygon":  { r: "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45", w: "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270" },
+            "arbitrum": { r: "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45", w: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1" }
+        };
+        const QUOTERS = {
+            "sepolia":  "0xEd1f6473345F45b75F8179591dd5bA1888cf2FB3",
+            "ethereum": "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
+            "base":     "0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a",
+            "bsc":      "0xB048Bbc1Ee6b733FFfCFb9e9CeF7375518e25997",
+            "polygon":  "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
+            "arbitrum": "0x61fFE014bA17989E743c5F6cB21bF9697530B21e"
+        };
+        const _nativeSym = {sepolia:'ETH',ethereum:'ETH',base:'ETH',bsc:'BNB',polygon:'MATIC',arbitrum:'ETH'};
 
-        if(!contractAddr || contractAddr.length !== 42) { toast('error','Nhập Mã Hợp Đồng hợp lệ!'); return; }
-        if(tokenId === '') { toast('error','Nhập Token ID!'); return; }
-        if(!walletsText) { toast('error','Dán danh sách Ví học sinh vào!'); return; }
+        const inRadios = document.querySelectorAll('t0ss2-\[name="token_in_type"\]');
+        // Wait, exportEngine replaces id="...", but not name="..."! So they stay as name="token_in_type".
+        // To be safe and isolated, we look within the block container.
+        const btnId = 't0ss2-swap-execute-btn';
+        const execBtn = document.getElementById(btnId);
+        
+        if (execBtn) {
+            const container = execBtn.closest('.khoi');
+            const inRadios = container.querySelectorAll('input[name="token_in_type"]');
+            const outRadios = container.querySelectorAll('input[name="token_out_type"]');
+            const inAddr = container.querySelector('#t0ss2-swap-in-addr');
+            const outAddr = container.querySelector('#t0ss2-swap-out-addr');
+            const amtInp = container.querySelector('#t0ss2-swap-amount');
+            const netSel = container.querySelector('#t0ss2-swap-network-sel');
+            const feeSel = container.querySelector('#t0ss2-swap-fee-sel');
+            const stt = container.querySelector('#t0ss2-swap-status');
 
-        const wallets = walletsText.split(/[\n,]+/).map(w => w.trim()).filter(w => w.length === 42 && w.startsWith('0x'));
-        if(wallets.length === 0) { toast('error','Không tìm thấy ví hợp lệ nào!'); return; }
-
-        log.style.display = 'block';
-        log.innerHTML = '🚀 Chuẩn bị phát bằng cho ' + wallets.length + ' học sinh trong 1 NỐT NHẠC...\n';
-
-        try {
-            btn.disabled = true;
-            btn.innerText = '⏳ ĐANG GOM LỆNH...';
-
-            const claimIface = new ethers.utils.Interface([
-                "function claim(address receiver, uint256 tokenId, uint256 quantity, address currency, uint256 pricePerToken, (bytes32[] proof, uint256 quantityLimitPerWallet, uint256 pricePerToken, address currency) allowlistProof, bytes data)"
-            ]);
-            const multicallContract = new ethers.Contract(contractAddr, [
-                "function multicall(bytes[] data) returns (bytes[] results)",
-                "function claim(address receiver, uint256 tokenId, uint256 quantity, address currency, uint256 pricePerToken, (bytes32[] proof, uint256 quantityLimitPerWallet, uint256 pricePerToken, address currency) allowlistProof, bytes data) payable"
-            ], signer);
-
-            const proof = [[], 0, 0, '0x0000000000000000000000000000000000000000'];
-            const nativeCurrency = '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
-            const calls = [];
-
-            for(const w of wallets) {
-                const shortW = w.substring(0,6) + '...' + w.slice(-4);
-                log.innerHTML += '\n📋 Gom lệnh cho ' + shortW;
-                const encoded = claimIface.encodeFunctionData('claim', [w, tokenId, amountPer, nativeCurrency, 0, proof, '0x']);
-                calls.push(encoded);
-            }
-
-            log.innerHTML += '\n\n🔫 Bắn 1 phát ' + calls.length + ' viên đạn... Ký MetaMask!';
-            log.scrollTop = log.scrollHeight;
-            btn.innerText = '⏳ KÝ METAMASK...';
-
-            try {
-                const tx = await multicallContract.multicall(calls);
-                log.innerHTML += '\n⏳ Đang xử lý trên Blockchain...';
-                log.scrollTop = log.scrollHeight;
-                await tx.wait();
-                log.innerHTML += '\n\n🏁 HOÀN TẤT! ✅ ' + wallets.length + '/' + wallets.length + ' bằng khen đã phát xong!';
-                log.innerHTML += '\n🧾 TX: ' + tx.hash;
-                toast('success', 'Phát bằng hàng loạt thành công! ' + wallets.length + ' học sinh!');
-            } catch(eMulti) {
-                log.innerHTML += '\n⚠️ Multicall lỗi, chuyển sang phát từng em...';
-                log.scrollTop = log.scrollHeight;
-                let success = 0, failed = 0;
-                for(let i = 0; i < wallets.length; i++) {
-                    const w = wallets[i];
-                    const shortW = w.substring(0,6) + '...' + w.slice(-4);
-                    log.innerHTML += '\n📤 [' + (i+1) + '/' + wallets.length + '] ' + shortW + '...';
-                    try {
-                        const tx = await multicallContract.claim(w, tokenId, amountPer, nativeCurrency, 0, proof, '0x');
-                        await tx.wait();
-                        log.innerHTML += ' ✅';
-                        success++;
-                    } catch(e2) {
-                        log.innerHTML += ' ❌ ' + (e2.reason || 'Lỗi');
-                        failed++;
-                    }
-                    log.scrollTop = log.scrollHeight;
+            function updateInputs() {
+                const isEqIn = [...inRadios].find(r=>r.checked).value;
+                const isEqOut = [...outRadios].find(r=>r.checked).value;
+                
+                if (isEqIn === 'native') {
+                    inAddr.disabled = true;
+                    inAddr.placeholder = "Native Token (Tự động Wrap)";
+                    inAddr.style.opacity = '0.6';
+                } else {
+                    inAddr.disabled = false;
+                    inAddr.placeholder = "Địa chỉ Token ERC-20 (0x...)";
+                    inAddr.style.opacity = '1';
                 }
-                log.innerHTML += '\n\n🏁 HOÀN TẤT! ✅ ' + success + ', ❌ ' + failed;
-                toast(failed === 0 ? 'success' : 'error', success + '/' + wallets.length + ' thành công!');
+
+                if (isEqOut === 'native') {
+                    outAddr.disabled = true;
+                    outAddr.placeholder = "Native Token (Tự động Unwrap)";
+                    outAddr.style.opacity = '0.6';
+                } else {
+                    outAddr.disabled = false;
+                    outAddr.placeholder = "Địa chỉ Token ERC-20 (0x...)";
+                    outAddr.style.opacity = '1';
+                }
             }
 
-            btn.innerText = '🏅 PHÁT BẰNG TIẾP';
-            btn.disabled = false;
+            inRadios.forEach(r => r.addEventListener('change', updateInputs));
+            outRadios.forEach(r => r.addEventListener('change', updateInputs));
+            updateInputs();
 
-        } catch(e) {
-            log.innerHTML += '\n❌ LỖI: ' + (e.reason || e.message);
-            btn.innerText = '🏅 ĐÓNG MỘC PHÁT BẰNG CHO CẢ LỚP';
-            btn.disabled = false;
-            toast('error', e.reason || e.message || 'Lỗi phát bằng!');
+            // === ƯỚC TÍNH GIÁ (QUOTE) ===
+            const quoteEl = container.querySelector('#t0ss2-swap-quote-value');
+            let _qTimer = null;
+            const getQuote = async () => {
+                if (!quoteEl) return;
+                if (!signer) { quoteEl.innerText = 'Kết nối ví trước'; return; }
+                const amtVal = amtInp.value.trim();
+                if (!amtVal || isNaN(amtVal) || Number(amtVal) <= 0) { quoteEl.innerText = '---'; return; }
+                const _isIn = [...inRadios].find(r=>r.checked).value;
+                const _isOut = [...outRadios].find(r=>r.checked).value;
+                if (_isIn==='native' && _isOut==='native') { quoteEl.innerText = '---'; return; }
+                const _net = netSel.value;
+                if (!NETWORKS[_net] || !QUOTERS[_net]) { quoteEl.innerText = '?'; return; }
+                const _WETH = NETWORKS[_net].w;
+                const _FEE = parseInt(feeSel.value);
+                let _tIn = _isIn==='native' ? _WETH : inAddr.value.trim();
+                let _tOut = _isOut==='native' ? _WETH : outAddr.value.trim();
+                if (!_tIn||_tIn.length!==42||!_tOut||_tOut.length!==42) { quoteEl.innerText = '---'; return; }
+                try {
+                    quoteEl.innerText = '⏳ ...';
+                    quoteEl.style.color = '#94a3b8';
+                    let _dIn = 18;
+                    if (_isIn!=='native') { try { _dIn = await new ethers.Contract(_tIn,["function decimals() view returns(uint8)"],signer).decimals(); } catch(e){} }
+                    const _amtIn = ethers.utils.parseUnits(amtVal, _dIn);
+                    const _q = new ethers.Contract(QUOTERS[_net],[
+                        "function quoteExactInputSingle(tuple(address tokenIn,address tokenOut,uint256 amountIn,uint24 fee,uint160 sqrtPriceLimitX96)) public returns(uint256 amountOut,uint160,uint32,uint256)"
+                    ], signer);
+                    const _res = await _q.callStatic.quoteExactInputSingle({ tokenIn:_tIn, tokenOut:_tOut, amountIn:_amtIn, fee:_FEE, sqrtPriceLimitX96:0 });
+                    let _dOut=18, _sym='';
+                    if (_isOut!=='native') {
+                        try { const _c=new ethers.Contract(_tOut,["function decimals() view returns(uint8)","function symbol() view returns(string)"],signer); _dOut=await _c.decimals(); _sym=await _c.symbol(); } catch(e){ _sym='Token'; }
+                    } else { _sym = _nativeSym[_net]||'ETH'; }
+                    const _outAmt = _res.amountOut || _res[0];
+                    const _fmtd = parseFloat(ethers.utils.formatUnits(_outAmt, _dOut));
+                    quoteEl.innerText = '≈ ' + _fmtd.toLocaleString('en-US',{maximumFractionDigits:6}) + ' ' + _sym;
+                    quoteEl.style.color = '#10b981';
+                } catch(e) {
+                    console.log('Quote err:', e);
+                    quoteEl.innerText = 'Pool chưa khả dụng';
+                    quoteEl.style.color = '#f59e0b';
+                }
+            }
+            const triggerQuote = () => { if(_qTimer) clearTimeout(_qTimer); _qTimer=setTimeout(getQuote,600); };
+            amtInp.addEventListener('input', triggerQuote);
+            inRadios.forEach(r => r.addEventListener('change', triggerQuote));
+            outRadios.forEach(r => r.addEventListener('change', triggerQuote));
+            netSel.addEventListener('change', triggerQuote);
+            feeSel.addEventListener('change', triggerQuote);
+            inAddr.addEventListener('input', triggerQuote);
+            outAddr.addEventListener('input', triggerQuote);
+
+            execBtn.addEventListener('click', async () => {
+                if(!signer){
+                    toast('error', 'Cần Kết Nối Ví (🦊) trước!'); return;
+                }
+
+                try {
+                    execBtn.disabled = true;
+                    execBtn.style.opacity = "0.5";
+                    stt.innerText = "Chuẩn bị giao dịch...";
+
+                    const amtVal = amtInp.value.trim();
+                    if(!amtVal || isNaN(amtVal) || Number(amtVal) <= 0) {
+                        throw new Error('Nhập số lượng hợp lệ!');
+                    }
+
+                    const isEqIn = [...inRadios].find(r=>r.checked).value;
+                    const isEqOut = [...outRadios].find(r=>r.checked).value;
+
+                    if (isEqIn === 'native' && isEqOut === 'native') {
+                        throw new Error('Không thể Swap Native sang Native!');
+                    }
+
+                    const net = netSel.value;
+                    if (!NETWORKS[net]) throw new Error('Mạng không được hỗ trợ!');
+                    const V3_ROUTER = NETWORKS[net].r;
+                    const WETH = NETWORKS[net].w;
+                    const FEE = parseInt(feeSel.value);
+
+                    let tokenIn = isEqIn === 'native' ? WETH : inAddr.value.trim();
+                    let tokenOut = isEqOut === 'native' ? WETH : outAddr.value.trim();
+
+                    if (!tokenIn || !tokenIn.startsWith('0x') || tokenIn.length !== 42) throw new Error('Địa chỉ Token IN không hợp lệ');
+                    if (!tokenOut || !tokenOut.startsWith('0x') || tokenOut.length !== 42) throw new Error('Địa chỉ Token OUT không hợp lệ');
+
+                    const routerAbi = [
+                        "function exactInputSingle(tuple(address tokenIn, address tokenOut, uint24 fee, address recipient, uint256 amountIn, uint256 amountOutMinimum, uint160 sqrtPriceLimitX96) params) payable returns (uint256 amountOut)",
+                        "function unwrapWETH9(uint256 amountMinimum, address recipient) payable",
+                        "function multicall(uint256 deadline, bytes[] data) payable returns (bytes[] results)"
+                    ];
+                    const router = new ethers.Contract(V3_ROUTER, routerAbi, signer);
+                    const iface = new ethers.utils.Interface(routerAbi);
+                    const userAddr = await signer.getAddress();
+
+                    if (isEqIn === 'native') {
+                        // NATIVE -> ERC20: Send native ETH, exactInputSingle handles Wrap internally if WETH is tokenIn and msg.value is sent
+                        stt.innerText = "Kiểm tra số dư Native Token...";
+                        const ethAmount = ethers.utils.parseEther(amtVal);
+                        const ethBal = await provider.getBalance(userAddr);
+                        if(ethBal.lt(ethAmount)) throw new Error('Không đủ số dư Native Token!');
+
+                        stt.innerHTML = '<span style="color:#3b82f6;">Chờ ký xác nhận Swap trên MetaMask...</span>';
+                        const tx = await router.exactInputSingle({
+                            tokenIn: WETH,
+                            tokenOut: tokenOut,
+                            fee: FEE,
+                            recipient: userAddr,
+                            amountIn: ethAmount,
+                            amountOutMinimum: 0,
+                            sqrtPriceLimitX96: 0
+                        }, { value: ethAmount });
+
+                        stt.innerText = 'Đợi Blockchain xác nhận...';
+                        await tx.wait();
+                        stt.innerHTML = '<span style="color:#10b981;">🎉 SWAP THÀNH CÔNG!</span>';
+                        toast('success', 'Swap Native Token thành công!');
+
+                    } else if (isEqOut === 'native') {
+                        // ERC20 -> NATIVE: Approve, Multicall(Swap ERC20->WETH, UnwrapWETH9)
+                        const erc20Abi = ["function approve(address,uint256) returns(bool)", "function decimals() view returns(uint8)"];
+                        const tIn = new ethers.Contract(tokenIn, erc20Abi, signer);
+                        let dec = 18; try { dec = await tIn.decimals(); }catch(e){}
+                        const amtTIn = ethers.utils.parseUnits(amtVal, dec);
+
+                        stt.innerText = "Đang xin quyền chuyển Token (Approve)... (1/2)";
+                        const txA = await tIn.approve(V3_ROUTER, ethers.constants.MaxUint256);
+                        await txA.wait();
+
+                        stt.innerHTML = '<span style="color:#3b82f6;">Chờ ký giao dịch Swap + Unwrap... (2/2)</span>';
+                        const callSwap = iface.encodeFunctionData('exactInputSingle', [{
+                            tokenIn: tokenIn,
+                            tokenOut: WETH,
+                            fee: FEE,
+                            recipient: V3_ROUTER, // Router holds WETH temporarily
+                            amountIn: amtTIn,
+                            amountOutMinimum: 0,
+                            sqrtPriceLimitX96: 0
+                        }]);
+                        const callUnwrap = iface.encodeFunctionData('unwrapWETH9', [0, userAddr]);
+                        const deadline = Math.floor(Date.now()/1000) + 600;
+
+                        const txS = await router.multicall(deadline, [callSwap, callUnwrap]);
+                        stt.innerText = 'Đợi Blockchain xác nhận...';
+                        await txS.wait();
+                        stt.innerHTML = '<span style="color:#10b981;">🎉 SWAP THÀNH CÔNG! Đã nhận Native Token.</span>';
+                        toast('success', 'Swap nhận Native Token thành công!');
+
+                    } else {
+                        // ERC20 -> ERC20: Approve, exactInputSingle
+                        const erc20Abi = ["function approve(address,uint256) returns(bool)", "function decimals() view returns(uint8)"];
+                        const tIn = new ethers.Contract(tokenIn, erc20Abi, signer);
+                        let dec = 18; try { dec = await tIn.decimals(); }catch(e){}
+                        const amtTIn = ethers.utils.parseUnits(amtVal, dec);
+
+                        stt.innerText = "Đang xin quyền chuyển Token (Approve)... (1/2)";
+                        const txA = await tIn.approve(V3_ROUTER, ethers.constants.MaxUint256);
+                        await txA.wait();
+
+                        stt.innerHTML = '<span style="color:#3b82f6;">Chờ ký giao dịch Swap... (2/2)</span>';
+                        const tx = await router.exactInputSingle({
+                            tokenIn: tokenIn,
+                            tokenOut: tokenOut,
+                            fee: FEE,
+                            recipient: userAddr,
+                            amountIn: amtTIn,
+                            amountOutMinimum: 0,
+                            sqrtPriceLimitX96: 0
+                        });
+                        stt.innerText = 'Đợi Blockchain xác nhận...';
+                        await tx.wait();
+                        stt.innerHTML = '<span style="color:#10b981;">🎉 SWAP THÀNH CÔNG!</span>';
+                        toast('success', 'Swap Token ERC-20 thành công!');
+                    }
+
+                    if(window.stemEvents) window.stemEvents.dispatchEvent(new Event('GIAO_DICH_THANH_CONG'));
+
+                } catch (e) {
+                    console.error(e);
+                    let msg = e.reason || e.message;
+                    if(msg.includes('user rejected')) msg = "Bạn đã từ chối ký giao dịch!";
+                    if(msg.includes('TF')) msg = "Pool không tồn tại hoặc hết thanh khoản!";
+                    stt.innerHTML = '<span style="color:#ef4444;">❌ ' + msg.substring(0,80) + '</span>';
+                    toast('error', msg);
+                } finally {
+                    execBtn.disabled = false;
+                    execBtn.style.opacity = "1";
+                }
+            });
         }
     }
-    
-    return { doAirdrop };
+            
+    return { updateInputs };
 })();
 
 const t0ss5_funcs = (function() {
 
-    async function checkHonorRoll() {
-        if(!signer){toast('error','Kết nối Ví trước!');return;}
-        const contractAddr = document.getElementById('t0ss5-honor-contract').value.trim();
-        const tokenId = document.getElementById('t0ss5-honor-tokenid').value.trim();
-        const walletsText = document.getElementById('t0ss5-honor-wallets').value.trim();
-        const btn = document.getElementById('t0ss5-honor-btn');
-        const grid = document.getElementById('t0ss5-honor-grid');
-
-        if(!contractAddr || contractAddr.length !== 42) { toast('error','Nhập Mã Hợp Đồng hợp lệ!'); return; }
-        if(tokenId === '') { toast('error','Nhập Token ID!'); return; }
-        if(!walletsText) { toast('error','Dán danh sách Ví cần kiểm tra!'); return; }
-
-        const wallets = walletsText.split(/[\n,]+/).map(w => w.trim()).filter(w => w.length === 42 && w.startsWith('0x'));
-        if(wallets.length === 0) { toast('error','Không tìm thấy ví hợp lệ nào!'); return; }
-
-        try {
-            btn.disabled = true;
-            btn.innerText = '⏳ ĐANG QUÉT BLOCKCHAIN...';
-            grid.innerHTML = '<div style="text-align:center;grid-column:1/-1;color:#c084fc;font-size:12px;">Đang kiểm tra ' + wallets.length + ' địa chỉ...</div>';
-
-            const contract = new ethers.Contract(contractAddr, [
-                "function balanceOf(address account, uint256 id) view returns (uint256)",
-                "function uri(uint256) view returns (string)"
-            ], signer);
-
-            // Thử load metadata ảnh Bằng Khen
-            let certImg = '';
-            let certName = 'Bằng Khen #' + tokenId;
-            try {
-                const rawUri = await contract.uri(tokenId);
-                const ipfsUri = rawUri.replace('ipfs://', 'https://ipfs.io/ipfs/').replace('{id}', tokenId);
-                const res = await fetch(ipfsUri);
-                const metadata = await res.json();
-                certImg = metadata.image ? metadata.image.replace('ipfs://', 'https://ipfs.io/ipfs/') : '';
-                certName = metadata.name || certName;
-            } catch(e) {}
-
-            grid.innerHTML = '';
-            let holders = 0;
-
-            for(const w of wallets) {
-                const shortW = w.substring(0,6) + '...' + w.slice(-4);
-                let hasToken = false;
-                try {
-                    const bal = await contract.balanceOf(w, tokenId);
-                    hasToken = bal.gt(0);
-                } catch(e) {
-                    // Fallback ERC721: thử ownerOf hoặc balanceOf(address)
-                    try {
-                        const c721 = new ethers.Contract(contractAddr, ["function balanceOf(address) view returns (uint256)"], signer);
-                        const bal721 = await c721.balanceOf(w);
-                        hasToken = bal721.gt(0);
-                    } catch(e2) {}
-                }
-
-                if(hasToken) holders++;
-
-                const card = document.createElement('div');
-                card.style.cssText = hasToken
-                    ? 'background:linear-gradient(135deg, #065f46, #047857);border:2px solid #10b981;border-radius:10px;padding:10px;text-align:center;'
-                    : 'background:#1e293b;border:1px solid #334155;border-radius:10px;padding:10px;text-align:center;opacity:0.6;';
-                const imgHtml = (hasToken && certImg) 
-                    ? `<img src="${certImg}" style="width:100%;max-height:80px;object-fit:cover;border-radius:6px;margin-bottom:6px;border:1px solid #34d399;" alt="${certName}">` 
-                    : `<div style="font-size:24px;margin-bottom:4px;">${hasToken ? '🎓' : '❌'}</div>`;
-
-                card.innerHTML = `
-                    ${imgHtml}
-                    <div style="font-size:10px;font-weight:bold;color:${hasToken ? '#34d399' : '#94a3b8'};">${hasToken ? 'ĐÃ TỐT NGHIỆP' : 'CHƯA CÓ'}</div>
-                    <div style="font-size:9px;color:#64748b;margin-top:4px;font-family:monospace;">${shortW}</div>
-                `;
-                grid.appendChild(card);
-            }
-
-            toast('success', 'Kiểm tra xong! ' + holders + '/' + wallets.length + ' đã sở hữu Bằng Khen!');
-            btn.innerText = '🔍 KIỂM TRA LẠI';
-            btn.disabled = false;
-
-        } catch(e) {
-            btn.innerText = '🔍 KIỂM TRA BẢN PHONG THẦN';
-            btn.disabled = false;
-            grid.innerHTML = '<div style="text-align:center;grid-column:1/-1;color:#ef4444;font-size:12px;padding:20px;">Lỗi: ' + (e.reason || e.message) + '</div>';
-        }
-    }
-    
-    return { checkHonorRoll };
+    return {  };
 })();
 
 
-    function bind(){const b=(id,fn,ev='click')=>{const el=document.getElementById(id);if(el)el.addEventListener(ev,fn);};b('t0ss1-web3-connect', t0ss1_funcs.connectWallet, 'click');b('t0ss2-airdrop-btn', t0ss2_funcs.doAirdrop, 'click');b('t0ss5-honor-btn', t0ss5_funcs.checkHonorRoll, 'click');}
+    function bind(){const b=(id,fn,ev='click')=>{const el=document.getElementById(id);if(el)el.addEventListener(ev,fn);};b('t0ss1-web3-connect', t0ss1_funcs.connectWallet, 'click');}
     if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);else bind();
 })();
 </script>
