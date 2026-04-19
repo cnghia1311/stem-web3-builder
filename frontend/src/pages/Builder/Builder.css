@@ -1,0 +1,10 @@
+.builder {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.builder-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}

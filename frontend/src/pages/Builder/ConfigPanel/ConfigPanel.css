@@ -1,0 +1,160 @@
+.config-panel {
+  width: var(--config-width);
+  min-width: var(--config-width);
+  background: var(--bg-sidebar);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+.config-section {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.config-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.config-field {
+  margin-bottom: 12px;
+}
+.config-field label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+.config-field input,
+.config-field select {
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+  transition: var(--transition);
+}
+.config-field input:focus,
+.config-field select:focus {
+  border-color: var(--color-primary);
+}
+.tab-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tab-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+.tab-item:hover {
+  background: var(--bg-hover);
+}
+.tab-item.active {
+  border-color: var(--color-primary);
+  background: var(--bg-hover);
+}
+.tab-item-name {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  min-width: 0;
+}
+.tab-item-name:focus {
+  color: var(--color-primary-light);
+}
+.tab-btn-delete {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: var(--transition);
+}
+.tab-item:hover .tab-btn-delete {
+  opacity: 1;
+}
+.tab-btn-delete:hover {
+  color: var(--color-danger);
+}
+.btn-add-tab {
+  width: 100%;
+  padding: 8px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: var(--transition);
+}
+.btn-add-tab:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary-light);
+}
+
+/* Contract Config */
+.contract-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  background: rgba(99, 102, 241, 0.06);
+  border-radius: var(--radius-sm);
+  border-left: 2px solid var(--color-primary);
+}
+.contract-block-group {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.contract-block-group:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+.contract-block-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.contract-block-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.contract-block-group .config-field input {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+}

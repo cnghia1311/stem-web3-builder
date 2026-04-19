@@ -1,0 +1,23 @@
+.add-row-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 0;
+  margin-top: 8px;
+}
+.add-row-btn {
+  padding: 6px 14px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.add-row-btn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary-light);
+  background: var(--bg-hover);
+}

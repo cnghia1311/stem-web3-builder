@@ -1,0 +1,65 @@
+.block-placeholder {
+  min-height: 60px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  position: relative;
+}
+.block-placeholder.is-over {
+  border-color: var(--color-primary);
+  background: var(--bg-hover);
+}
+.block-placeholder.has-block {
+  border-style: solid;
+  background: var(--bg-sidebar);
+  gap: 8px;
+  padding: 10px;
+}
+.block-empty-text {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.block-ph-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.block-ph-info {
+  flex: 1;
+  min-width: 0;
+}
+.block-ph-info h5 {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.block-ph-info p {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+.block-ph-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 18px;
+  height: 18px;
+  border: none;
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--color-danger);
+  border-radius: 50%;
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: var(--transition);
+}
+.block-placeholder:hover .block-ph-remove {
+  opacity: 1;
+}

@@ -1,0 +1,29 @@
+{
+  "name": "stem-web3-backend",
+  "version": "1.0.0",
+  "description": "Backend API for STEM Web3 Builder",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon --exec \"node --experimental-modules\" src/server.js",
+    "start": "node src/server.js",
+    "extract-blocks": "node scripts/extract-blocks.js"
+  },
+  "type": "module",
+  "keywords": ["stem", "web3", "builder"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "mongodb": "^6.3.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "joi": "^17.11.0",
+    "dotenv": "^16.3.1",
+    "http-status-codes": "^2.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
