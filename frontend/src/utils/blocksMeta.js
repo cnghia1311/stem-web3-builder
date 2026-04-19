@@ -100,6 +100,13 @@ const BLOCKS_META = [
       { key: 'poolAddress', label: 'Pool Address (GeckoTerminal)', placeholder: '0x... (địa chỉ pool trên DEX)' }
     ]
   },
+  {
+    id: 'dao-token-voting', name: '🗳️ Bầu Cử Bằng Token', desc: 'Bỏ phiếu DAO (1 Token = 1 Điểm)',
+    color: '#eab308', label: 'Bầu cử',
+    contractFields: [
+      { key: 'votingContract', label: 'Contract Voting', placeholder: '0x... (địa chỉ RealTokenVoting)' }
+    ]
+  },
 ]
 
 export default BLOCKS_META

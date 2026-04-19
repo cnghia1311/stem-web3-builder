@@ -18,7 +18,14 @@ const START_SERVER = () => {
   app.use(express.json())
 
   // Serve static files từ thư mục apps (HTML đã xuất)
-  app.use('/apps', express.static('apps'))
+  // Thêm CSP header cho phép ethers.js hoạt động (cần eval cho ABI encoding)
+  app.use('/apps', (req, res, next) => {
+    res.setHeader(
+      'Content-Security-Policy',
+      "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline';"
+    )
+    next()
+  }, express.static('apps'))
 
   // API Routes v1
   app.use('/api/v1', APIs_V1)

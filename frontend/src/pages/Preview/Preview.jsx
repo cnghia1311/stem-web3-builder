@@ -26,6 +26,7 @@ function MockBlock({ blockId }) {
     'uniswap-v3-sell': { display: '1 ETH ≈ 3,200.50 USDT', btn: '🦄 Swap Now' },
     'gecko-chart': { display: '📈 Chart 24h — +5.2%', btn: null },
     'gecko-txns': { display: '📊 15 giao dịch gần nhất', btn: null },
+    'dao-token-voting': { display: '🗳️ Ứng viên A: 65% | Ứng viên B: 35%', btn: '🗳️ Bình Chọn' },
   }
 
   const mock = mockContent[blockId] || { display: block.desc, btn: null }
