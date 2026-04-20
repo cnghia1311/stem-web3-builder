@@ -100,14 +100,12 @@ const explore = async ({ page = 1, limit = 12, search = '', author = '', sort = 
 }
 
 /**
- * Xóa app (soft delete) — kiểm tra ownership ở tầng Service
+ * Xóa app (hard delete) — kiểm tra ownership ở tầng Service
  */
 const deleteOneById = async (id) => {
-  return await GET_DB().collection(APP_COLLECTION_NAME).findOneAndUpdate(
-    { _id: new ObjectId(id) },
-    { $set: { _destroy: true } },
-    { returnDocument: 'after' }
-  )
+  return await GET_DB().collection(APP_COLLECTION_NAME).deleteOne({
+    _id: new ObjectId(id)
+  })
 }
 
 export const appModel = {

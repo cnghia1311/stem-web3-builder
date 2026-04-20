@@ -107,6 +107,16 @@ const BLOCKS_META = [
       { key: 'votingContract', label: 'Contract Voting', placeholder: '0x... (địa chỉ RealTokenVoting)' }
     ]
   },
+  {
+    id: 'uniswap-v3-lp', name: '💧 Cung Cấp Thanh Khoản', desc: 'Tạo Pool & thêm thanh khoản Uniswap V3',
+    color: '#06b6d4', label: 'Thanh Khoản',
+    contractFields: []
+  },
+  {
+    id: 'erc20-factory', name: '🏭 Máy In Coin', desc: 'Tạo đồng Coin ERC-20 của riêng bạn',
+    color: '#f59e0b', label: 'Máy In Coin',
+    contractFields: []
+  },
 ]
 
 export default BLOCKS_META

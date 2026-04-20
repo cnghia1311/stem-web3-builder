@@ -7,9 +7,14 @@ import { appService } from '../services/appService.js'
 const getMyApps = async (req, res, next) => {
   try {
     const userId = req.jwtDecoded._id
+    console.log('🔍 [getMyApps] userId from JWT:', userId, typeof userId)
     const apps = await appService.getMyApps(userId)
+    console.log('🔍 [getMyApps] found apps:', apps.length)
     res.status(StatusCodes.OK).json(apps)
-  } catch (error) { next(error) }
+  } catch (error) {
+    console.error('❌ [getMyApps] error:', error.message)
+    next(error)
+  }
 }
 
 /**

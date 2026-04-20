@@ -27,6 +27,8 @@ function MockBlock({ blockId }) {
     'gecko-chart': { display: '📈 Chart 24h — +5.2%', btn: null },
     'gecko-txns': { display: '📊 15 giao dịch gần nhất', btn: null },
     'dao-token-voting': { display: '🗳️ Ứng viên A: 65% | Ứng viên B: 35%', btn: '🗳️ Bình Chọn' },
+    'uniswap-v3-lp': { display: '💧 Token A: 500 + Token B: 500', btn: '💧 Thêm Thanh Khoản' },
+    'erc20-factory': { display: '🏭 Tên: MyCoin | Ký hiệu: MYC | SL: 1,000,000', btn: '🚀 Tạo Coin' },
   }
 
   const mock = mockContent[blockId] || { display: block.desc, btn: null }

@@ -7,32 +7,29 @@ import ApiError from '../utils/ApiError.js'
  * Middleware xác thực JWT — verify access token từ header Authorization
  */
 const isAuthorized = async (req, res, next) => {
-  // Lấy access token từ header Authorization
   const authHeader = req.headers.authorization
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    console.log('🔐 [AUTH] No token found in header')
     next(new ApiError(StatusCodes.UNAUTHORIZED, 'Unauthorized! Token not found.'))
     return
   }
 
   const accessToken = authHeader.split(' ')[1]
+  console.log('🔐 [AUTH] Token received:', accessToken.substring(0, 20) + '...')
 
   try {
-    // Verify token
     const decoded = jwt.verify(accessToken, env.JWT_SECRET)
-
-    // Gán thông tin user vào request để dùng ở controller/service
+    console.log('🔐 [AUTH] Token valid! User:', decoded._id)
     req.jwtDecoded = decoded
-
     next()
   } catch (error) {
-    // Token hết hạn → frontend cần gọi refresh token
+    console.log('🔐 [AUTH] Token error:', error.name, error.message)
     if (error.name === 'TokenExpiredError') {
+      console.log('🔐 [AUTH] Expired at:', error.expiredAt)
       next(new ApiError(StatusCodes.GONE, 'Token expired! Please refresh.'))
       return
     }
-
-    // Token không hợp lệ
     next(new ApiError(StatusCodes.UNAUTHORIZED, 'Unauthorized! Invalid token.'))
   }
 }

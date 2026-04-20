@@ -22,5 +22,8 @@ export const BLOCK_PREFIXES = {
   'market-shop': 'mkshop-',
   'uniswap-v3-sell': 'swap-',
   'gecko-chart': 'chart-',
-  'gecko-txns': 'txns-'
+  'gecko-txns': 'txns-',
+  'dao-token-voting': 'vote-',
+  'uniswap-v3-lp': 'lp-',
+  'erc20-factory': 'tf-'
 }

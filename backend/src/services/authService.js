@@ -12,7 +12,7 @@ const generateTokens = (userInfo) => {
   const accessToken = jwt.sign(
     { _id: userInfo._id, email: userInfo.email, role: userInfo.role, displayName: userInfo.displayName },
     env.JWT_SECRET,
-    { expiresIn: '1h' }
+    { expiresIn: '7d' }
   )
 
   const refreshToken = jwt.sign(
@@ -115,7 +115,7 @@ const refreshToken = async (clientRefreshToken) => {
     const accessToken = jwt.sign(
       { _id: user._id, email: user.email, role: user.role },
       env.JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: '7d' }
     )
 
     // Tạo refresh token mới (rotation)

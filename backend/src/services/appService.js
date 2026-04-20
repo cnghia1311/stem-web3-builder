@@ -55,7 +55,7 @@ const deleteApp = async (filename, userId) => {
     fs.unlinkSync(filePath)
   }
 
-  // Soft delete trong DB
+  // Xóa hẳn trong DB
   await appModel.deleteOneById(app._id.toString())
 
   return { message: 'Đã xóa: ' + filename }

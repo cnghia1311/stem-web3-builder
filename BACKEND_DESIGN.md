@@ -16,15 +16,16 @@
 - **Export → MongoDB**: `exportService.saveHtmlFromData()` sau khi ghi file HTML xong sẽ tự insert metadata vào MongoDB (cần user đăng nhập).
 - **App Routes**: `GET /my` (apps của tôi, cần JWT), `DELETE /:filename` (xóa + kiểm tra ownership), `GET /explore` (public, phân trang + search + filter).
 - **App Service**: `getMyApps(userId)`, `explore(query)`, `deleteApp(filename, userId)` — có chống path traversal + kiểm tra ownership.
+- **Frontend trang Apps**: `Apps.jsx` đã tích hợp API hiển thị 2 tab "Apps Của Tôi" và "Khám Phá", hỗ trợ phân trang/tìm kiếm.
+- **Frontend Export flow**: "Xuất App" đã gắn JWT, backend lưu metadata chuẩn xác với tài khoản.
+- **Refresh Token**: Đã cấu hình Axios Interceptor tự động refresh access token.
+- **Xóa App**: Xóa cứng (hard delete) dữ liệu khỏi MongoDB khi người dùng xóa app.
 
 ---
 
 ### 🔲 Việc cần làm tiếp
 
-1. **Frontend trang Apps**: Cập nhật `Apps.jsx` gọi API `/my` + `/explore` thay vì đọc filesystem. Hiển thị 2 tab: "Apps Của Tôi" và "Khám Phá".
-2. **Frontend Export flow**: Nút "Xuất App" gửi kèm JWT → backend lưu metadata đúng userId.
-3. **Refresh Token**: Frontend chưa xử lý auto-refresh khi access token hết hạn (interceptor axios).
-4. **Block data**: Kiểm tra lại `Assembler` nhận đúng format từ Frontend khi Test/Preview.
+- (Toàn bộ các tính năng Quản lý App và Xác thực đều đã hoàn thiện)
 
 ---
 
