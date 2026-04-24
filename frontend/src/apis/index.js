@@ -68,7 +68,7 @@ axiosInstance.interceptors.response.use(
 
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
         originalRequest.headers['x-retry'] = 'true'
-        
+
         return axiosInstance(originalRequest)
       } catch (refreshError) {
         processQueue(refreshError, null)
