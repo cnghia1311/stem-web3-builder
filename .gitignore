@@ -2,7 +2,8 @@ node_modules/
 .env
 .env.*
 !.env.example
-apps/
 dist/
 .DS_Store
 .vscode/
+backend/apps
+package-lock.json
