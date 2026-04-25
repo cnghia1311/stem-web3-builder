@@ -25,5 +25,9 @@ export const BLOCK_PREFIXES = {
   'gecko-txns': 'txns-',
   'dao-token-voting': 'vote-',
   'uniswap-v3-lp': 'lp-',
-  'erc20-factory': 'tf-'
+  'erc20-factory': 'tf-',
+  'erc721-factory': 'nf-',
+  'mint-nft': 'mint-',
+  'market-factory': 'mf-',
+  'voting-factory': 'vf-'
 }

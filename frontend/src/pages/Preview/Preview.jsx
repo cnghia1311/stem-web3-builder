@@ -29,6 +29,10 @@ function MockBlock({ blockId }) {
     'dao-token-voting': { display: '🗳️ Ứng viên A: 65% | Ứng viên B: 35%', btn: '🗳️ Bình Chọn' },
     'uniswap-v3-lp': { display: '💧 Token A: 500 + Token B: 500', btn: '💧 Thêm Thanh Khoản' },
     'erc20-factory': { display: '🏭 Tên: MyCoin | Ký hiệu: MYC | SL: 1,000,000', btn: '🚀 Tạo Coin' },
+    'erc721-factory': { display: '🎨 Tên: Tranh Của Tôi | Ký hiệu: ART', btn: '🚀 Tạo Bộ Sưu Tập' },
+    'mint-nft': { display: '🖌️ Upload ảnh → Tải lên IPFS → Mint NFT', btn: '🖌️ Mint NFT' },
+    'market-factory': { display: '🏪 Tên: Marketplace Tranh Lớp 10A1', btn: '🚀 Tạo Marketplace' },
+    'voting-factory': { display: '🗳️ Token: StemCoin | Ứng viên: A, B, C', btn: '🚀 Tạo Phòng Bầu Cử' },
   }
 
   const mock = mockContent[blockId] || { display: block.desc, btn: null }

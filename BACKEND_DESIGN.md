@@ -283,3 +283,29 @@ CLIENT_URL=http://localhost:5173
 7. Tạo export routes
 8. Chạy `extract-blocks.js` tách blocks.js
 9. Test toàn bộ API với Postman
+
+---
+
+## 10. Kiến Trúc "Token Siêu Cấp" & Upgradable Factory
+
+Thay vì sử dụng nhiều Factory khác nhau hoặc Proxy cho từng tính năng, hệ thống Stem Builder thống nhất sử dụng một **Token Siêu Cấp (Super Token)** duy nhất thông qua **UUPS Upgradable Proxy**.
+
+### 10.1. `StemToken` (Token Full Option)
+Kế thừa đồng thời:
+- `ERC20` (Chuyển tiền, Balance, Allowance cho Marketplace/DEX)
+- `ERC20Burnable` (Tính năng đốt coin tương lai)
+- `ERC20Permit` (Phê duyệt không tốn gas)
+- `ERC20Votes` (Sử dụng cho khối Bầu cử DAO, có snapshot/delegate)
+
+Token này tương thích **100% ngược và xuôi** với mọi khối trong hệ thống (từ Cơ bản đến Nâng cao).
+
+### 10.2. `TokenFactoryUpgradeable`
+Áp dụng pattern **UUPS Proxy**:
+- **Địa chỉ Factory không bao giờ thay đổi**: Backend (`erc20-factory.js`) chỉ cần lưu 1 địa chỉ duy nhất.
+- **Nâng cấp tính năng**: Nếu tương lai muốn thêm logic vào Factory (vd: thu phí tạo token, giới hạn rate limit), chỉ cần deploy Logic V2 và gọi hàm `upgradeToAndCall()` mà không cần chạm vào server hay frontend.
+
+### 10.3. Các bước triển khai (Đang thực hiện)
+1. Deploy `TokenFactoryUpgradeable` qua Remix IDE (chọn *Deploy with Proxy*).
+2. Lưu địa chỉ Proxy (`ERC1967Proxy`) vào hệ thống (ghi vào `ContractDeploy.txt`).
+3. Cập nhật khối **Máy Tạo Coin** (`backend/data/blocks/erc20-factory.js`) để trỏ đến địa chỉ Proxy mới.
+4. Test luồng tạo Coin mới và dùng nó cho Khối Bầu Cử DAO.

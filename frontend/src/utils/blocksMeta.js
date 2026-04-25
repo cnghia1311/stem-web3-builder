@@ -117,6 +117,26 @@ const BLOCKS_META = [
     color: '#f59e0b', label: 'Máy In Coin',
     contractFields: []
   },
+  {
+    id: 'erc721-factory', name: '🎨 Máy Tạo BST NFT', desc: 'Tạo Bộ sưu tập NFT (ERC-721) của riêng bạn',
+    color: '#8b5cf6', label: 'Máy Tạo BST NFT',
+    contractFields: []
+  },
+  {
+    id: 'mint-nft', name: '🖌️ Đúc NFT (Mint)', desc: 'Upload ảnh & Mint NFT vào Bộ Sưu Tập',
+    color: '#ec4899', label: 'Đúc NFT',
+    contractFields: []
+  },
+  {
+    id: 'market-factory', name: '🏪 Máy Tạo Marketplace', desc: 'Tạo Sàn Giao Dịch NFT (Marketplace) của riêng bạn',
+    color: '#06b6d4', label: 'Máy Tạo Marketplace',
+    contractFields: []
+  },
+  {
+    id: 'voting-factory', name: '🗳️ Máy Tạo Phòng Bầu Cử', desc: 'Tạo cuộc Bầu cử DAO mới với Token của bạn',
+    color: '#eab308', label: 'Máy Tạo Bầu Cử',
+    contractFields: []
+  },
 ]
 
 export default BLOCKS_META

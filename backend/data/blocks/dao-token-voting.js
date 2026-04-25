@@ -33,7 +33,12 @@ export default {
         return `
     <div class="khoi" style="border-left-color:#eab308;">
         <div class="khoi-title">🗳️ Bầu cử DAO</div>
-        <input id="vote-contract" type="hidden" value="${addr}">
+
+        <!-- Ô nhập địa chỉ Phòng Bầu Cử -->
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+            <input id="vote-contract" type="text" value="${addr}" placeholder="🗳️ Dán Mã Phòng Bầu Cử (0x...)" style="flex:1;background:#0f172a;color:#fff;border:1px solid #334155;padding:10px;border-radius:6px;font-size:11px;">
+            <button id="vote-load-btn" style="background:#eab308;color:#000;border:none;padding:10px 16px;border-radius:8px;font-size:12px;font-weight:bold;cursor:pointer;white-space:nowrap;">🔄 TẢI</button>
+        </div>
 
         <!-- Nút kích hoạt quyền bầu cử (Delegate) -->
         <div id="vote-delegate-box" style="background:rgba(234,179,8,0.1);border:1px solid rgba(234,179,8,0.3);border-radius:10px;padding:12px;margin-bottom:12px;text-align:center;">
@@ -42,7 +47,7 @@ export default {
         </div>
 
         <!-- Trạng thái -->
-        <p id="vote-status" style="font-size:12px;color:#94a3b8;margin-bottom:10px;">⏳ Đang tải danh sách ứng viên...</p>
+        <p id="vote-status" style="font-size:12px;color:#94a3b8;margin-bottom:10px;">📋 Dán Mã Phòng Bầu Cử rồi bấm "Tải" để xem ứng viên...</p>
 
         <!-- Danh sách ứng viên + thanh tiến độ -->
         <div id="vote-candidates" style="margin-bottom:12px;"></div>
@@ -232,8 +237,11 @@ export default {
     function delegateVotingPower() { return __GlobalVote_delegate('${pfx}'); }
     function startVotingElection() { return __GlobalVote_startVoting('${pfx}'); }
     function castVote() { return __GlobalVote_vote('${pfx}'); }
-    // Tự động load danh sách khi page load (không cần ví)
-    setTimeout(loadVotingData, 1000);
+    // Chỉ auto-load nếu đã có sẵn địa chỉ từ config
+    var _voteInput = document.getElementById('${pfx}vote-contract');
+    if (_voteInput && _voteInput.value.trim().length === 42) {
+        setTimeout(loadVotingData, 1000);
+    }
     // Lắng nghe sự kiện thay đổi tài khoản MetaMask để reload
     if (window.ethereum) {
         window.ethereum.on('accountsChanged', function() { setTimeout(loadVotingData, 500); });
@@ -241,14 +249,18 @@ export default {
     // Theo dõi khi signer được set (sau khi kết nối ví)
     setInterval(function() {
         if (signer && !window.__votingLoaded) {
-            window.__votingLoaded = true;
-            loadVotingData();
+            var inp = document.getElementById('${pfx}vote-contract');
+            if (inp && inp.value.trim().length === 42) {
+                window.__votingLoaded = true;
+                loadVotingData();
+            }
         }
     }, 1000);
     `,
     bindings: [
         { btn: "vote-btn", fn: "castVote" },
         { btn: "vote-delegate-btn", fn: "delegateVotingPower" },
-        { btn: "vote-start-btn", fn: "startVotingElection" }
+        { btn: "vote-start-btn", fn: "startVotingElection" },
+        { btn: "vote-load-btn", fn: "loadVotingData" }
     ]
 }
