@@ -33,6 +33,7 @@ function MockBlock({ blockId }) {
     'mint-nft': { display: '🖌️ Upload ảnh → Tải lên IPFS → Mint NFT', btn: '🖌️ Mint NFT' },
     'market-factory': { display: '🏪 Tên: Marketplace Tranh Lớp 10A1', btn: '🚀 Tạo Marketplace' },
     'voting-factory': { display: '🗳️ Token: StemCoin | Ứng viên: A, B, C', btn: '🚀 Tạo Phòng Bầu Cử' },
+    'admin-revoke': { display: '🔥 Token ID: #0 | ⚠️ Chỉ dành cho Admin', btn: '🔥 Thu Hồi Ngay' },
   }
 
   const mock = mockContent[blockId] || { display: block.desc, btn: null }

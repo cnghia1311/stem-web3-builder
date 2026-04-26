@@ -1,4 +1,5 @@
-// ==================== KHỐI: MÁY IN COIN (ERC-20 FACTORY) ====================
+import { FACTORY_ADDRESSES } from '../contracts/contractFactorys.js';
+
 export default {
     id: "erc20-factory",
     name: "🏭 Máy In Coin",
@@ -52,7 +53,7 @@ export default {
     </div>`,
 
     engineCode: () => `
-        const FACTORY_ADDR = '0x8ED67760EB4B33c4c8179B4D8e08Dc407157F4D8';
+        const FACTORY_ADDR = '${FACTORY_ADDRESSES.ERC20_FACTORY}';
         const FACTORY_ABI = [
             "function createToken(string name, string symbol, uint256 initialSupply) public returns (address)",
             "function getUserTokens(address user) public view returns (address[] memory)",

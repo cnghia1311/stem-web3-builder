@@ -29,5 +29,6 @@ export const BLOCK_PREFIXES = {
   'erc721-factory': 'nf-',
   'mint-nft': 'mint-',
   'market-factory': 'mf-',
-  'voting-factory': 'vf-'
+  'voting-factory': 'vf-',
+  'admin-revoke': 'revoke-'
 }

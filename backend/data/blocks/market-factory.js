@@ -1,3 +1,5 @@
+import { FACTORY_ADDRESSES } from '../contracts/contractFactorys.js';
+
 // ==================== KHỐI: MÁY TẠO MARKETPLACE (MARKETPLACE FACTORY) ====================
 export default {
     id: "market-factory",
@@ -44,7 +46,7 @@ export default {
     </div>`,
 
     engineCode: () => `
-        const MARKET_FACTORY_ADDR = '0x63A1b1B2A2C6364512Da0A1595dD559F97899c55';
+        const MARKET_FACTORY_ADDR = '${FACTORY_ADDRESSES.MARKETPLACE_FACTORY}';
         const MARKET_FACTORY_ABI = [
             "function createMarketplace(string memory _name) external returns (address)",
             "event MarketplaceCreated(address indexed marketplaceAddress, string name, address indexed owner)"

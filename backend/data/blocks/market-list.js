@@ -68,7 +68,22 @@ export default {
 
             // Bước 1: Ủy quyền (Approve) cho Marketplace
             btn.innerText = '🔑 BƯỚC 1: ỦY QUYỀN...'; toast('info', 'Ủy quyền NFT cho Marketplace...');
-            const nftContract = new ethers.Contract(nftAddr, ["function approve(address to, uint256 tokenId)","function getApproved(uint256 tokenId) view returns (address)"], signer);
+            const nftContract = new ethers.Contract(nftAddr, [
+                "function approve(address to, uint256 tokenId)",
+                "function getApproved(uint256 tokenId) view returns (address)",
+                "function isSoulbound() view returns (bool)"
+            ], signer);
+
+            // Kiểm tra chống đem bán Chứng Chỉ (Soulbound)
+            try {
+                const isSb = await nftContract.isSoulbound();
+                if(isSb) {
+                    toast('error', 'Cảnh báo: NFT này là Chứng Chỉ, bị khóa vĩnh viễn và không thể đem bán!');
+                    btn.innerText = '📋 NIÊM YẾT BÁN HÀNG'; btn.disabled = false;
+                    return;
+                }
+            } catch(e) {} // Bỏ qua nếu NFT thường không có hàm này
+
             const approved = await nftContract.getApproved(tokenId);
             if(approved.toLowerCase() !== mpAddr.toLowerCase()) {
                 const txApprove = await nftContract.approve(mpAddr, tokenId);

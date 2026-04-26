@@ -1,3 +1,5 @@
+import { FACTORY_ADDRESSES } from '../contracts/contractFactorys.js';
+
 // ==================== KHỐI: MÁY TẠO BỘ SƯU TẬP NFT (ERC-721 FACTORY) ====================
 export default {
     id: "erc721-factory",
@@ -16,7 +18,13 @@ export default {
             <input type="text" id="nf-collection-name" placeholder="Ví dụ: Tranh Của Tôi" maxlength="32" style="width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:14px;outline:none;margin-bottom:12px;">
 
             <label style="display:block;font-size:12px;color:#94a3b8;margin-bottom:6px;font-weight:bold;">Ký Hiệu (Symbol)</label>
-            <input type="text" id="nf-collection-symbol" placeholder="Ví dụ: ART (3-5 chữ cái)" maxlength="8" style="width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:14px;outline:none;text-transform:uppercase;margin-bottom:4px;">
+            <input type="text" id="nf-collection-symbol" placeholder="Ví dụ: ART (3-5 chữ cái)" maxlength="8" style="width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:14px;outline:none;text-transform:uppercase;margin-bottom:12px;">
+
+            <label style="display:block;font-size:12px;color:#94a3b8;margin-bottom:6px;font-weight:bold;">Loại NFT</label>
+            <select id="nf-is-soulbound" style="width:100%;padding:10px;border-radius:8px;border:1px solid #334155;background:#1e293b;color:#e2e8f0;font-size:13px;outline:none;margin-bottom:4px;">
+                <option value="false">🎨 Tranh nghệ thuật (Được phép mua bán)</option>
+                <option value="true">🎓 Bằng cấp / Chứng chỉ (Khóa vĩnh viễn vào ví)</option>
+            </select>
             <div style="font-size:10px;color:#64748b;margin-bottom:6px;">🎨 Bạn sẽ là Owner duy nhất có quyền Mint NFT trong bộ sưu tập này</div>
         </div>
 
@@ -48,9 +56,9 @@ export default {
     </div>`,
 
     engineCode: () => `
-        const NFT_FACTORY_ADDR = '0xe6390004d419b0E604f06461C0bD83cF8F32daa8';
+        const NFT_FACTORY_ADDR = '${FACTORY_ADDRESSES.ERC721_FACTORY}';
         const NFT_FACTORY_ABI = [
-            "function createCollection(string name, string symbol) public returns (address)",
+            "function createCollection(string name, string symbol, bool isSoulbound) public returns (address)",
             "function getUserCollections(address user) public view returns (address[] memory)",
             "function getTotalCollections() public view returns (uint256)",
             "event CollectionCreated(address indexed creator, address collectionAddress, string name, string symbol)"
@@ -58,12 +66,13 @@ export default {
         const ERC721_MINI = [
             "function name() view returns (string)",
             "function symbol() view returns (string)",
-            "function getTotalMinted() view returns (uint256)"
+            "function totalSupply() view returns (uint256)"
         ];
 
         const _nfBtn = document.getElementById('nf-create-btn');
         const _nfName = document.getElementById('nf-collection-name');
         const _nfSymbol = document.getElementById('nf-collection-symbol');
+        const _nfSoulbound = document.getElementById('nf-is-soulbound');
         const _nfStatus = document.getElementById('nf-status');
         const _nfResult = document.getElementById('nf-result');
         const _nfLoadHist = document.getElementById('nf-load-history');
@@ -85,6 +94,7 @@ export default {
                 if (!signer) { toast('error', 'Cần kết nối ví (🦊) trước!'); return; }
                 var colName = _nfName.value.trim();
                 var colSymbol = _nfSymbol.value.trim();
+                var isSoulbound = _nfSoulbound ? (_nfSoulbound.value === 'true') : false;
 
                 if (!colName) { toast('error', 'Nhập tên Bộ Sưu Tập!'); return; }
                 if (!colSymbol || colSymbol.length < 2) { toast('error', 'Nhập ký hiệu (ít nhất 2 ký tự)!'); return; }
@@ -95,7 +105,7 @@ export default {
                     _nfResult.style.display = 'none';
 
                     var factory = new ethers.Contract(NFT_FACTORY_ADDR, NFT_FACTORY_ABI, signer);
-                    var tx = await factory.createCollection(colName, colSymbol);
+                    var tx = await factory.createCollection(colName, colSymbol, isSoulbound);
                     _nfStatus.innerHTML = '<span style="color:#a855f7;">⛏️ Đang đợi Blockchain xác nhận...</span>';
 
                     var receipt = await tx.wait();
@@ -160,7 +170,7 @@ export default {
                         try {
                             var c = new ethers.Contract(addr, ERC721_MINI, signer);
                             sym = await c.symbol();
-                            var total = await c.getTotalMinted();
+                            var total = await c.totalSupply();
                             minted = total.toString();
                         } catch(e) {}
                         html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:#1e293b;border-radius:6px;margin-bottom:4px;">';

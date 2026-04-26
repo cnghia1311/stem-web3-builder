@@ -137,6 +137,11 @@ const BLOCKS_META = [
     color: '#eab308', label: 'Máy Tạo Bầu Cử',
     contractFields: []
   },
+  {
+    id: 'admin-revoke', name: '🔥 Thu Hồi Chứng Chỉ', desc: 'Admin thu hồi và đốt chứng chỉ đã cấp phát nhầm',
+    color: '#ef4444', label: 'Thu Hồi Chứng Chỉ',
+    contractFields: []
+  }
 ]
 
 export default BLOCKS_META

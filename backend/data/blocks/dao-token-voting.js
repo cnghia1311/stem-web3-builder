@@ -152,8 +152,26 @@ export default {
                 }
             }
 
-            // Nút Delegate luôn hiện — bấm nhiều lần cũng không sao
-            // (Chỉ ẩn sau khi user bấm thành công trong hàm __GlobalVote_delegate)
+            // Tự động kiểm tra trạng thái Kích Hoạt (Delegate) trên Blockchain
+            if (signer) {
+                try {
+                    const tokenAddr = await contract.votingToken();
+                    const tokenContract = new ethers.Contract(tokenAddr, TOKEN_DELEGATE_ABI, prov);
+                    const currentDelegatee = await tokenContract.delegates(userAddr);
+                    
+                    if (currentDelegatee === ethers.constants.AddressZero) {
+                        // Chưa kích hoạt -> Hiện hộp thông báo
+                        if (delegateBox) delegateBox.style.display = 'block';
+                    } else {
+                        // Đã kích hoạt -> Ẩn hộp thông báo
+                        if (delegateBox) delegateBox.style.display = 'none';
+                    }
+                } catch(e) {
+                    if (delegateBox) delegateBox.style.display = 'block'; // Lỗi thì cứ hiện cho chắc
+                }
+            } else {
+                if (delegateBox) delegateBox.style.display = 'none';
+            }
 
             // Kiểm tra trạng thái bầu cử
             if (!isStarted) {

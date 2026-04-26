@@ -1,10 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
@@ -33,39 +29,21 @@ contract StemToken is ERC20, ERC20Burnable, ERC20Permit, ERC20Votes {
 }
 
 // ============================================================================
-// 2. Token Factory (Có thể Nâng Cấp - Upgradable Proxy UUPS)
+// 2. Token Factory (Thông thường - Không Proxy)
 // ============================================================================
-contract TokenFactoryUpgradeable is Initializable, UUPSUpgradeable, OwnableUpgradeable {
+contract ERC20Factory {
     
-    // Lưu ý: Trong Upgradable contract, KHÔNG ĐƯỢC gán giá trị mặc định trực tiếp ở đây.
     mapping(address => address[]) public userTokens;
     address[] public allTokens;
 
     event TokenCreated(address indexed creator, address tokenAddress, string name, string symbol, uint256 supply);
 
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() {
-        _disableInitializers(); // Khóa constructor của logic contract để tránh bị tấn công
-    }
-
-    // Hàm thay thế cho Constructor (Chỉ được chạy 1 lần lúc deploy Proxy)
-    function initialize(address initialOwner) initializer public {
-        __Ownable_init(initialOwner);
-        __UUPSUpgradeable_init();
-    }
-
-    // Hàm bắt buộc của UUPS: Kiểm tra ai có quyền nâng cấp hợp đồng (Chỉ Owner)
-    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
-
-    // ========================================================================
-    // Các logic chính của Factory
-    // ========================================================================
     function createToken(string memory name, string memory symbol, uint256 initialSupply) public returns (address) {
         require(initialSupply > 0, "Supply must be > 0");
         require(bytes(name).length > 0, "Name cannot be empty");
         require(bytes(symbol).length > 0, "Symbol cannot be empty");
 
-        // Gọi đẻ Token Siêu Cấp
+        // Gọi đẻ Token Siêu Cấp và gán quyền chủ sở hữu cho người gọi hàm (msg.sender)
         StemToken newToken = new StemToken(name, symbol, initialSupply, msg.sender);
 
         userTokens[msg.sender].push(address(newToken));

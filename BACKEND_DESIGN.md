@@ -286,11 +286,11 @@ CLIENT_URL=http://localhost:5173
 
 ---
 
-## 10. Kiến Trúc "Token Siêu Cấp" & Upgradable Factory
+## 10. Kiến Trúc "Token Siêu Cấp" (Full Option)
 
-Thay vì sử dụng nhiều Factory khác nhau hoặc Proxy cho từng tính năng, hệ thống Stem Builder thống nhất sử dụng một **Token Siêu Cấp (Super Token)** duy nhất thông qua **UUPS Upgradable Proxy**.
+Thay vì sử dụng nhiều loại Token khác nhau cho từng tính năng, hệ thống Stem Builder thống nhất sử dụng các **Token Siêu Cấp (Super Token)** tích hợp đầy đủ tính năng ngay từ đầu. Chúng ta **KHÔNG** sử dụng Upgradable Proxy cho các Token Factory (như ERC20 hay ERC721) để đơn giản hóa quá trình triển khai, nhưng bản thân các Token được tạo ra sẽ mang "full tính năng".
 
-### 10.1. `StemToken` (Token Full Option)
+### 10.1. `StemToken` (ERC20 Full Option)
 Kế thừa đồng thời:
 - `ERC20` (Chuyển tiền, Balance, Allowance cho Marketplace/DEX)
 - `ERC20Burnable` (Tính năng đốt coin tương lai)
@@ -299,13 +299,17 @@ Kế thừa đồng thời:
 
 Token này tương thích **100% ngược và xuôi** với mọi khối trong hệ thống (từ Cơ bản đến Nâng cao).
 
-### 10.2. `TokenFactoryUpgradeable`
-Áp dụng pattern **UUPS Proxy**:
-- **Địa chỉ Factory không bao giờ thay đổi**: Backend (`erc20-factory.js`) chỉ cần lưu 1 địa chỉ duy nhất.
-- **Nâng cấp tính năng**: Nếu tương lai muốn thêm logic vào Factory (vd: thu phí tạo token, giới hạn rate limit), chỉ cần deploy Logic V2 và gọi hàm `upgradeToAndCall()` mà không cần chạm vào server hay frontend.
+### 10.2. `StemNFT` (ERC721 Full Option)
+Kế thừa đồng thời:
+- `ERC721` (Mint, Transfer, Appprove cho Marketplace)
+- `ERC721URIStorage` (Lưu trữ metadata on-chain linh hoạt)
+- `ERC721Burnable` (Tính năng đốt NFT)
+- `ERC721Enumerable` (Quản lý và duyệt danh sách NFT dễ dàng, quan trọng cho front-end)
+- `ERC2981` (Royalty cho NFT Marketplace)
 
 ### 10.3. Các bước triển khai (Đang thực hiện)
-1. Deploy `TokenFactoryUpgradeable` qua Remix IDE (chọn *Deploy with Proxy*).
-2. Lưu địa chỉ Proxy (`ERC1967Proxy`) vào hệ thống (ghi vào `ContractDeploy.txt`).
-3. Cập nhật khối **Máy Tạo Coin** (`backend/data/blocks/erc20-factory.js`) để trỏ đến địa chỉ Proxy mới.
-4. Test luồng tạo Coin mới và dùng nó cho Khối Bầu Cử DAO.
+1. Deploy `ERC20Factory` (thông thường, không proxy) qua Remix IDE.
+2. Deploy `ERC721Factory` (thông thường, không proxy) qua Remix IDE.
+3. Lưu địa chỉ các Factory vào hệ thống (ghi vào `ContractDeploy.txt`).
+4. Cập nhật khối **Máy Tạo Coin** (`backend/data/blocks/erc20-factory.js`) và khối **Tạo Bộ Sưu Tập NFT** (`backend/data/blocks/mint-nft.js` hoặc tương tự) để trỏ đến địa chỉ Factory mới.
+5. Test luồng tạo Coin/NFT mới và dùng chúng cho Khối Bầu Cử DAO, Marketplace.

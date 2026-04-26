@@ -1,3 +1,5 @@
+import { FACTORY_ADDRESSES } from '../contracts/contractFactorys.js';
+
 // ==================== KHỐI: MÁY TẠO PHÒNG BẦU CỬ (VOTING FACTORY) ====================
 export default {
     id: "voting-factory",
@@ -55,7 +57,7 @@ export default {
     </div>`,
 
     engineCode: () => `
-        const VOTING_FACTORY_ADDR = '0x8B2452f23A5207F1758Ab1D0b435002D05B3FC13';
+        const VOTING_FACTORY_ADDR = '${FACTORY_ADDRESSES.VOTING_FACTORY}';
         const VOTING_FACTORY_ABI = [
             "function createVoting(address _tokenAddress, string[] memory _candidateNames) external returns (address)",
             "function getUserVotings(address user) external view returns (address[] memory)",
