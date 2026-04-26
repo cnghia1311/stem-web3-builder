@@ -7,25 +7,22 @@
 
 ## 📋 Changelog
 
-### ✅ 17/04/2026 — Auth + App Ownership
+### ✅ 26/04/2026 — Chuẩn hóa Factory & Admin Revoke
 
 **Đã hoàn thành:**
-- **Auth JWT thật**: Register (kiểm tra trùng email + displayName) → Login → trả Access Token (1h) + Refresh Token (14 ngày). JWT payload gồm `_id, email, role, displayName`.
-- **Frontend Auth**: Trang Login/Register gọi API thật, lưu `accessToken` vào localStorage, gửi kèm header `Authorization` trong mọi request.
-- **App Model** (`appModel.js`): Schema MongoDB collection `apps` — `userId, authorEmail, filename, title, url, size, createdAt, _destroy`.
-- **Export → MongoDB**: `exportService.saveHtmlFromData()` sau khi ghi file HTML xong sẽ tự insert metadata vào MongoDB (cần user đăng nhập).
-- **App Routes**: `GET /my` (apps của tôi, cần JWT), `DELETE /:filename` (xóa + kiểm tra ownership), `GET /explore` (public, phân trang + search + filter).
-- **App Service**: `getMyApps(userId)`, `explore(query)`, `deleteApp(filename, userId)` — có chống path traversal + kiểm tra ownership.
-- **Frontend trang Apps**: `Apps.jsx` đã tích hợp API hiển thị 2 tab "Apps Của Tôi" và "Khám Phá", hỗ trợ phân trang/tìm kiếm.
-- **Frontend Export flow**: "Xuất App" đã gắn JWT, backend lưu metadata chuẩn xác với tài khoản.
-- **Refresh Token**: Đã cấu hình Axios Interceptor tự động refresh access token.
-- **Xóa App**: Xóa cứng (hard delete) dữ liệu khỏi MongoDB khi người dùng xóa app.
+- **Chuẩn hóa Factory**: Chuyển toàn bộ cấu hình địa chỉ contract factory sang `backend/data/contracts/contractFactorys.js` để dễ quản lý và cập nhật.
+- **Nâng cấp ERC721 Siêu Cấp**: Tích hợp tính năng **Soulbound (SBT)** vào `StemNFT`. Cho phép tạo bộ sưu tập Chứng chỉ không thể chuyển nhượng.
+- **Admin Revoke**: Phát triển khối chức năng **🔥 Thu Hồi Chứng Chỉ** (`admin-revoke.js`) cho phép Admin đốt NFT đã cấp nhầm từ ví học sinh.
+- **Bảo mật Marketplace**: Cập nhật khối `market-list.js` để tự động kiểm tra và chặn niêm yết bán các NFT loại Soulbound (Bằng khen).
+- **Tối ưu Tủ Kính (Drop Gallery)**: Nâng cấp thuật toán quét NFT trong khối `drop-gallery.js` sử dụng chuẩn `ERC721Enumerable` (`balanceOf` + `tokenOfOwnerByIndex`) giúp hiển thị chính xác 100% trạng thái thực tế trên Blockchain.
+- **Dọn dẹp mã nguồn**: Loại bỏ các file cấu hình cũ (`contracts.js` trong data/blocks) để tránh xung đột.
 
 ---
 
 ### 🔲 Việc cần làm tiếp
 
-- (Toàn bộ các tính năng Quản lý App và Xác thực đều đã hoàn thiện)
+- **Phát triển Gacha Drop Factory**: Thiết kế hệ thống Đúc Lười (Lazy Minting). Cho phép giáo viên nạp "bản thiết kế" NFT lên Contract và học sinh vào tự quay Gacha (Claim) ngẫu nhiên.
+- **Triển khai ERC1155Factory**: Hoàn thiện bộ công cụ cho chuẩn NFT đa năng (Semi-fungible tokens).
 
 ---
 
